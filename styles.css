@@ -102,6 +102,46 @@ h1 {
   margin-bottom: 16px;
 }
 
+.journey-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.journey-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(87, 60, 39, 0.1);
+}
+
+.journey-step strong,
+.journey-step small {
+  display: block;
+}
+
+.journey-step small {
+  color: var(--tekst-stonowany);
+}
+
+.journey-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  background: rgba(201, 111, 58, 0.22);
+  box-shadow: 0 0 0 6px rgba(201, 111, 58, 0.08);
+  flex-shrink: 0;
+}
+
+.journey-step.current .journey-dot {
+  background: var(--sukces);
+  box-shadow: 0 0 0 6px rgba(0, 177, 109, 0.12);
+}
+
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
@@ -176,88 +216,119 @@ label {
     linear-gradient(160deg, rgba(255, 241, 227, 0.92) 0%, rgba(252, 226, 203, 0.78) 100%);
   box-shadow: var(--cien);
   overflow: hidden;
+  padding: 22px;
 }
 
-.orb,
-.graphic-ring,
-.graphic-line,
+.progress-header,
+.progress-track,
+.hero-metrics,
 .graphic-center {
   position: absolute;
 }
 
-.orb {
-  border-radius: 999px;
-  filter: blur(2px);
-  opacity: 0.7;
-}
-
-.orb-one {
-  width: 120px;
-  height: 120px;
-  background: rgba(201, 111, 58, 0.15);
-  top: 20px;
-  right: 18px;
-}
-
-.orb-two {
-  width: 96px;
-  height: 96px;
-  background: rgba(0, 177, 109, 0.14);
-  bottom: 26px;
-  left: 24px;
-}
-
-.graphic-ring {
-  border-radius: 999px;
-  border: 1px solid rgba(140, 62, 24, 0.18);
-}
-
-.ring-outer {
-  width: 210px;
-  height: 210px;
-  right: 60px;
-  top: 34px;
-}
-
-.ring-inner {
-  width: 150px;
-  height: 150px;
-  right: 90px;
-  top: 64px;
-}
-
-.graphic-line {
-  height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(140, 62, 24, 0.4), transparent);
-}
-
-.line-one {
-  width: 160px;
-  top: 86px;
+.progress-header {
+  top: 22px;
   left: 22px;
-  transform: rotate(-12deg);
+  right: 22px;
 }
 
-.line-two {
-  width: 140px;
-  bottom: 64px;
+.progress-header span,
+.metric-chip span,
+.graphic-center span {
+  display: block;
+  color: var(--tekst-stonowany);
+  margin-bottom: 6px;
+}
+
+.progress-header strong {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.15rem;
+}
+
+.progress-track {
+  left: 28px;
   right: 28px;
-  transform: rotate(18deg);
+  top: 108px;
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(140, 62, 24, 0.1);
+}
+
+.progress-fill {
+  position: absolute;
+  inset: 0 26% 0 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(0, 177, 109, 0.72), rgba(201, 111, 58, 0.85));
+}
+
+.progress-milestone {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: #fffaf5;
+  border: 2px solid rgba(140, 62, 24, 0.32);
+  box-shadow: 0 6px 14px rgba(76, 44, 22, 0.08);
+}
+
+.progress-milestone span {
+  position: absolute;
+  top: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.78rem;
+  color: var(--akcent-ciemny);
+  font-weight: 700;
+}
+
+.milestone-start {
+  left: 0;
+}
+
+.milestone-mid {
+  left: 54%;
+}
+
+.milestone-end {
+  left: 100%;
+}
+
+.hero-metrics {
+  left: 22px;
+  right: 22px;
+  bottom: 96px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.metric-chip {
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(87, 60, 39, 0.1);
+}
+
+.metric-chip strong {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.05rem;
 }
 
 .graphic-center {
   left: 34px;
-  bottom: 30px;
+  right: 34px;
+  bottom: 24px;
   padding: 16px 18px;
   border-radius: 22px;
   background: rgba(255, 255, 255, 0.8);
   border: 1px solid rgba(87, 60, 39, 0.1);
 }
 
-.graphic-center span {
-  display: block;
-  color: var(--tekst-stonowany);
-  margin-bottom: 6px;
+.graphic-center-wide {
+  left: 22px;
+  right: 22px;
 }
 
 .graphic-center strong {
@@ -691,7 +762,9 @@ canvas {
   .projection-grid,
   .entry-form,
   .stats-strip,
-  .monthly-goals {
+  .monthly-goals,
+  .journey-strip,
+  .hero-metrics {
     grid-template-columns: 1fr;
   }
 
