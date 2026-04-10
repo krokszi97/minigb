@@ -14,6 +14,10 @@
   --cien: 0 24px 50px rgba(76, 44, 22, 0.12);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -54,8 +58,15 @@ body::before {
   display: flex;
   justify-content: space-between;
   gap: 24px;
-  align-items: flex-end;
+  align-items: stretch;
   margin-bottom: 24px;
+}
+
+.hero-copy {
+  flex: 1 1 58%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .eyebrow,
@@ -87,7 +98,29 @@ h1 {
   width: 100%;
   color: var(--tekst-stonowany);
   font-size: 1.04rem;
-  line-height: 2;
+  line-height: 1.65;
+  margin-bottom: 16px;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.hero-link {
+  padding: 10px 14px;
+  border-radius: 999px;
+  text-decoration: none;
+  color: var(--akcent-ciemny);
+  background: rgba(255, 255, 255, 0.76);
+  border: 1px solid rgba(87, 60, 39, 0.12);
+  transition: transform 140ms ease, background 140ms ease;
+}
+
+.hero-link:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.92);
 }
 
 .hero-badge,
@@ -103,6 +136,8 @@ h1 {
   padding: 18px 20px;
   border-radius: 26px;
   text-align: right;
+  position: relative;
+  z-index: 2;
 }
 
 .hero-badge span,
@@ -118,6 +153,116 @@ label {
   font-size: 2rem;
   margin-top: 6px;
   font-family: "Space Grotesk", sans-serif;
+}
+
+.hero-visual {
+  flex: 0 0 min(420px, 38%);
+  position: relative;
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.hero-graphic {
+  position: relative;
+  flex: 1;
+  min-height: 240px;
+  border: 1px solid rgba(64, 42, 20, 0.12);
+  border-radius: 32px;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.78), transparent 28%),
+    linear-gradient(160deg, rgba(255, 241, 227, 0.92) 0%, rgba(252, 226, 203, 0.78) 100%);
+  box-shadow: var(--cien);
+  overflow: hidden;
+}
+
+.orb,
+.graphic-ring,
+.graphic-line,
+.graphic-center {
+  position: absolute;
+}
+
+.orb {
+  border-radius: 999px;
+  filter: blur(2px);
+  opacity: 0.7;
+}
+
+.orb-one {
+  width: 120px;
+  height: 120px;
+  background: rgba(201, 111, 58, 0.15);
+  top: 20px;
+  right: 18px;
+}
+
+.orb-two {
+  width: 96px;
+  height: 96px;
+  background: rgba(0, 177, 109, 0.14);
+  bottom: 26px;
+  left: 24px;
+}
+
+.graphic-ring {
+  border-radius: 999px;
+  border: 1px solid rgba(140, 62, 24, 0.18);
+}
+
+.ring-outer {
+  width: 210px;
+  height: 210px;
+  right: 60px;
+  top: 34px;
+}
+
+.ring-inner {
+  width: 150px;
+  height: 150px;
+  right: 90px;
+  top: 64px;
+}
+
+.graphic-line {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(140, 62, 24, 0.4), transparent);
+}
+
+.line-one {
+  width: 160px;
+  top: 86px;
+  left: 22px;
+  transform: rotate(-12deg);
+}
+
+.line-two {
+  width: 140px;
+  bottom: 64px;
+  right: 28px;
+  transform: rotate(18deg);
+}
+
+.graphic-center {
+  left: 34px;
+  bottom: 30px;
+  padding: 16px 18px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(87, 60, 39, 0.1);
+}
+
+.graphic-center span {
+  display: block;
+  color: var(--tekst-stonowany);
+  margin-bottom: 6px;
+}
+
+.graphic-center strong {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.5rem;
 }
 
 /* DWIE GŁÓWNE KOLUMNY APLIKACJI */
@@ -367,6 +512,36 @@ button:hover {
   background: var(--panel-mocny);
 }
 
+.reveal-card {
+  opacity: 0;
+  transform: translateY(18px);
+  animation: fade-up 560ms ease forwards;
+}
+
+.calculator-card.reveal-card {
+  animation-delay: 90ms;
+}
+
+.tracker-card.reveal-card {
+  animation-delay: 180ms;
+}
+
+.monthly-table-card.reveal-card {
+  animation-delay: 260ms;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .monthly-table-head {
   margin-bottom: 10px;
 }
@@ -501,6 +676,11 @@ canvas {
   .hero {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .hero-visual {
+    flex-basis: auto;
+    min-height: auto;
   }
 
   .hero-badge {

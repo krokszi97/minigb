@@ -36,16 +36,35 @@
             Potencjalna dla masy startowej <strong>130 kg</strong> każdy miesiąc, 6 i 12 miesięcy
             po MINI GB oraz prosty dziennik spadku masy.
           </p>
+          <div class="hero-actions">
+            <a class="hero-link" href="#plan-roczny">Plan 12 miesięcy</a>
+            <a class="hero-link" href="#tracker">Tracker postępów</a>
+            <a class="hero-link" href="#tabela-miesieczna">Tabela ręczna</a>
+          </div>
         </div>
-        <div class="hero-badge">
-          <span>Start</span>
-          <strong id="heroStartWeight">130 kg</strong>
+        <div class="hero-visual">
+          <div class="hero-badge">
+            <span>Start</span>
+            <strong id="heroStartWeight">130 kg</strong>
+          </div>
+          <div class="hero-graphic" aria-hidden="true">
+            <div class="orb orb-one"></div>
+            <div class="orb orb-two"></div>
+            <div class="graphic-ring ring-outer"></div>
+            <div class="graphic-ring ring-inner"></div>
+            <div class="graphic-line line-one"></div>
+            <div class="graphic-line line-two"></div>
+            <div class="graphic-center">
+              <span>Cel 12 m</span>
+              <strong>82.2 kg</strong>
+            </div>
+          </div>
         </div>
       </section>
 
       <section class="grid">
         <!-- KOLUMNA LEWA: kalkulator i plan miesięczny -->
-        <article class="card calculator-card">
+        <article class="card calculator-card reveal-card" id="plan-roczny">
           <div class="card-head">
             <div>
               <p class="section-label">Kalkulator</p>
@@ -121,7 +140,7 @@
         </article>
 
         <!-- KOLUMNA PRAWA: tracker, statystyki i wykres -->
-        <article class="card tracker-card">
+        <article class="card tracker-card reveal-card" id="tracker">
           <div class="card-head">
             <div>
               <p class="section-label">Tracker</p>
@@ -168,7 +187,7 @@
             <canvas id="progressChart" width="860" height="340" aria-label="Wykres postępów"></canvas>
           </div>
 
-          <div class="monthly-table-card">
+          <div class="monthly-table-card reveal-card" id="tabela-miesieczna">
             <div class="card-head monthly-table-head">
               <div>
                 <p class="section-label">Tabela</p>
