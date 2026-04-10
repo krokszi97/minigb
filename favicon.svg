@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="MiniGB favicon">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f4b183" />
+      <stop offset="100%" stop-color="#c96f3a" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="18" fill="url(#bg)" />
+  <circle cx="32" cy="32" r="24" fill="#fff7ef" opacity="0.92" />
+  <path
+    d="M20 42V22h4l8 10 8-10h4v20h-4V29l-8 10-8-10v13z"
+    fill="#8c3e18"
+  />
+</svg>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MiniGB | Kalkulator i tracker po MGB</title>
+    <meta
+      name="description"
+      content="MiniGB to prosty kalkulator utraty wagi po MGB oraz miesięczny tracker progresu po operacji."
+    />
+    <meta name="theme-color" content="#c96f3a" />
+    <meta property="og:title" content="MiniGB | Kalkulator i tracker po MGB" />
+    <meta
+      property="og:description"
+      content="Kalkulator prognozy 6 i 12 miesięcy oraz ręczny tracker progresu miesiąc po miesiącu."
+    />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="shortcut icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <!-- SEKCJA HERO: tutaj najłatwiej zmienisz główny nagłówek i opis -->
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">MGB / OAGB</p>
+          <h1>MiniGB - kalkulator i tracker postępów</h1>
+          <p class="hero-text">
+            Potencjalna dla masy startowej <strong>130 kg</strong> każdy miesiąc, 6 i 12 miesięcy
+            po MINI GB oraz prosty dziennik spadku masy.
+          </p>
+        </div>
+        <div class="hero-badge">
+          <span>Start</span>
+          <strong id="heroStartWeight">130 kg</strong>
+        </div>
+      </section>
+
+      <section class="grid">
+        <!-- KOLUMNA LEWA: kalkulator i plan miesięczny -->
+        <article class="card calculator-card">
+          <div class="card-head">
+            <div>
+              <p class="section-label">Kalkulator</p>
+              <h2>Założenia prognozy</h2>
+            </div>
+          </div>
+
+          <form id="calculatorForm" class="form-grid">
+            <label>
+              Waga początkowa (kg)
+              <input id="startWeight" type="number" min="60" max="300" step="0.1" value="130" />
+            </label>
+
+            <label>
+              Data opki
+              <input id="surgeryDate" type="date" />
+            </label>
+          </form>
+
+          <div class="assumption-box">
+            <h3>Model prognozy</h3>
+            <p>
+              Szacunek bazuje na orientacyjnym <strong>%TWL</strong> po MGB/OAGB:
+              około <strong>27,5%</strong> po 6 miesiącach i <strong>36,8%</strong>
+              po 12 miesiącach. Pokazuję też przedziały ostrożny i ambitny.
+            </p>
+          </div>
+
+          <div class="projection-grid">
+            <article class="projection-card">
+              <p class="projection-label">6 miesięcy</p>
+              <div class="projection-main">
+                <strong id="weight6m">94.3 kg</strong>
+                <span id="loss6m">-35.8 kg</span>
+              </div>
+              <p id="range6m" class="projection-range">Zakres: 89.7-100.1 kg</p>
+            </article>
+
+            <article class="projection-card highlight">
+              <p class="projection-label">12 miesięcy</p>
+              <div class="projection-main">
+                <strong id="weight12m">82.2 kg</strong>
+                <span id="loss12m">-47.8 kg</span>
+              </div>
+              <p id="range12m" class="projection-range">Zakres: 78.0-88.4 kg</p>
+            </article>
+          </div>
+
+          <div class="timeline">
+            <div class="timeline-row">
+              <span>Dziś</span>
+              <strong id="todayWeight">130.0 kg</strong>
+            </div>
+            <div class="timeline-row">
+              <span id="month6Label">+ 6 miesięcy</span>
+              <strong id="timeline6m">94.3 kg</strong>
+            </div>
+            <div class="timeline-row">
+              <span id="month12Label">+ 12 miesięcy</span>
+              <strong id="timeline12m">82.2 kg</strong>
+            </div>
+          </div>
+
+          <div class="monthly-plan">
+            <div class="card-head monthly-head">
+              <div>
+                <p class="section-label">Plan 12 m</p>
+                <h3>Cel miesiąc po miesiącu</h3>
+              </div>
+            </div>
+            <div id="monthlyGoals" class="monthly-goals"></div>
+          </div>
+        </article>
+
+        <!-- KOLUMNA PRAWA: tracker, statystyki i wykres -->
+        <article class="card tracker-card">
+          <div class="card-head">
+            <div>
+              <p class="section-label">Tracker</p>
+              <h2>Moje miesięczne wpisy </h2>
+            </div>
+            <button id="clearEntries" class="ghost-button" type="button">Wyczyść</button>
+          </div>
+
+          <form id="entryForm" class="entry-form">
+            <label>
+              Data
+              <input id="entryDate" type="date" required />
+            </label>
+
+            <label>
+              Waga (kg)
+              <input id="entryWeight" type="number" min="40" max="300" step="0.1" required />
+            </label>
+
+            <label class="full-span">
+              Notatka
+              <input id="entryNote" type="text" maxlength="120" placeholder="Np. kontrola, lepsze nawodnienie, spacer 5 km" />
+            </label>
+
+            <button class="primary-button full-span" type="submit">Dodaj wpis</button>
+          </form>
+
+          <div class="stats-strip">
+            <div>
+              <span>Ostatni wpis</span>
+              <strong id="latestWeight">Brak</strong>
+            </div>
+            <div>
+              <span>Zmiana od startu</span>
+              <strong id="deltaFromStart">0.0 kg</strong>
+            </div>
+            <div>
+              <span>Do prognozy 12 m</span>
+              <strong id="gapToYear">-</strong>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <canvas id="progressChart" width="860" height="340" aria-label="Wykres postępów"></canvas>
+          </div>
+
+          <div class="monthly-table-card">
+            <div class="card-head monthly-table-head">
+              <div>
+                <p class="section-label">Tabela</p>
+                <h3>Progres miesiąc po miesiącu</h3>
+              </div>
+              <div class="table-actions">
+                <button id="exportMonthlyTable" class="ghost-button" type="button">Eksport CSV</button>
+                <button id="resetMonthlyTable" class="ghost-button" type="button">Reset tabeli</button>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table class="monthly-progress-table">
+                <thead>
+                  <tr>
+                    <th>Miesiąc</th>
+                    <th>Data</th>
+                    <th>Waga</th>
+                    <th>Notatka</th>
+                  </tr>
+                </thead>
+                <tbody id="monthlyProgressBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div id="entryList" class="entry-list"></div>
+        </article>
+      </section>
+
+      <!-- STOPKA INFORMACYJNA: zmień tekst ostrzeżenia i linki do źródeł -->
+      <section class="card note-card">
+        <p>
+          Narzędzie ma charakter orientacyjny i nie chce się nim opierać w 100%, lecz zapisywać swój progres każdego miesiąca
+        </p>
+        <p>
+          Źródła założeń: badanie kohortowe MGB/OAGB z 12-miesięcznym follow-upem
+          oraz raport kliniczny z Wielkiej Brytanii:
+          <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7003543/" target="_blank" rel="noreferrer">PMC</a>,
+          <a href="https://pubmed.ncbi.nlm.nih.gov/26781603/" target="_blank" rel="noreferrer">PubMed</a>.
+        </p>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
