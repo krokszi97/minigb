@@ -568,6 +568,78 @@ button:hover {
   font-size: 1.2rem;
 }
 
+.publish-card,
+.public-snapshot {
+  margin-bottom: 18px;
+  padding: 16px;
+  border-radius: 24px;
+  border: 1px solid rgba(87, 60, 39, 0.08);
+  background: var(--panel-mocny);
+}
+
+.publish-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.publish-copy p,
+.publish-copy h3 {
+  margin-top: 0;
+}
+
+.publish-status {
+  margin-bottom: 0;
+  color: var(--tekst-stonowany);
+  line-height: 1.5;
+}
+
+.public-snapshot-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.snapshot-box {
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(87, 60, 39, 0.08);
+}
+
+.snapshot-box span,
+.public-snapshot-empty,
+.snapshot-list li small {
+  color: var(--tekst-stonowany);
+}
+
+.snapshot-box span,
+.snapshot-box strong {
+  display: block;
+}
+
+.snapshot-box strong {
+  margin-top: 8px;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.2rem;
+}
+
+.snapshot-list {
+  margin: 14px 0 0;
+  padding-left: 18px;
+}
+
+.snapshot-list li + li {
+  margin-top: 8px;
+}
+
+.snapshot-list strong,
+.snapshot-list small {
+  display: block;
+}
+
 /* BLOK WYKRESU */
 .chart-card {
   padding: 16px;
@@ -768,12 +840,18 @@ canvas {
   .stats-strip,
   .monthly-goals,
   .journey-strip,
-  .hero-metrics {
+  .hero-metrics,
+  .public-snapshot-grid {
     grid-template-columns: 1fr;
   }
 
   .table-actions {
     width: 100%;
+  }
+
+  .publish-card {
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .card {

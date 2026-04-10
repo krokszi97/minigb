@@ -196,6 +196,25 @@
             <button id="clearEntries" class="ghost-button" type="button">Wyczyść</button>
           </div>
 
+          <div class="publish-card">
+            <div class="publish-copy">
+              <p class="section-label">Publiczny snapshot</p>
+              <h3>Dane widoczne dla wszystkich</h3>
+              <p id="publishStatus" class="publish-status">
+                Twoje wpisy są lokalne. Ten przycisk pobiera plik do publikacji dla Netlify/GitHub.
+              </p>
+            </div>
+            <button id="preparePublishData" class="primary-button" type="button">
+              Przygotuj dane do publikacji
+            </button>
+          </div>
+
+          <div id="publicSnapshot" class="public-snapshot">
+            <div class="public-snapshot-empty">
+              Brak opublikowanego snapshotu. Po wygenerowaniu pliku i pushu będzie widoczny tutaj.
+            </div>
+          </div>
+
           <form id="entryForm" class="entry-form">
             <label>
               Data

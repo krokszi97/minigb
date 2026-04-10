@@ -1,6 +1,7 @@
 // Edytuj tutaj nazwę klucza localStorage, jeśli chcesz trzymać dane pod innym identyfikatorem.
 const STORAGE_KEY = "mgb-progress-tracker-v1";
 const MONTHLY_TABLE_KEY = "mgb-manual-monthly-table-v1";
+const PUBLISHED_PROGRESS_URL = "published-progress.json";
 
 // Najważniejsze teksty interfejsu do ręcznej edycji.
 const APP_TEXT = {
@@ -27,6 +28,7 @@ const entryForm = document.querySelector("#entryForm");
 const clearEntriesButton = document.querySelector("#clearEntries");
 const exportMonthlyTableButton = document.querySelector("#exportMonthlyTable");
 const resetMonthlyTableButton = document.querySelector("#resetMonthlyTable");
+const preparePublishDataButton = document.querySelector("#preparePublishData");
 
 const startWeightInput = document.querySelector("#startWeight");
 const surgeryDateInput = document.querySelector("#surgeryDate");
@@ -53,6 +55,8 @@ const deltaFromStart = document.querySelector("#deltaFromStart");
 const gapToYear = document.querySelector("#gapToYear");
 const entryList = document.querySelector("#entryList");
 const monthlyProgressBody = document.querySelector("#monthlyProgressBody");
+const publicSnapshot = document.querySelector("#publicSnapshot");
+const publishStatus = document.querySelector("#publishStatus");
 const chartCanvas = document.querySelector("#progressChart");
 const chartContext = chartCanvas.getContext("2d");
 
@@ -210,6 +214,93 @@ function projectionRangeText(startWeight, range) {
   const low = calculateProjection(startWeight, range.high).finalWeight;
   const high = calculateProjection(startWeight, range.low).finalWeight;
   return `${APP_TEXT.rangeLabel}: ${formatKg(low)}-${formatKg(high)}`;
+}
+
+// Buduje dane do publicznej publikacji na stronie.
+function buildPublishedPayload(state) {
+  const entries = getSortedEntries(state.entries);
+  const latestEntry = entries.length > 0 ? entries[entries.length - 1] : null;
+  const recentEntries = entries.slice(-6).reverse();
+  const monthlyTable = getManualMonthlyTable(state).map((row) => ({
+    monthLabel: row.monthLabel,
+    date: row.date,
+    weight: row.weight,
+    note: row.note,
+  }));
+
+  return {
+    generatedAt: isoDate(new Date()),
+    startWeight: Number(state.startWeight),
+    surgeryDate: state.surgeryDate,
+    latestEntry,
+    recentEntries,
+    monthlyTable,
+  };
+}
+
+// Renderuje publiczny snapshot widoczny dla wszystkich po opublikowaniu pliku JSON.
+function renderPublicSnapshot(data) {
+  if (!data || (!data.latestEntry && (!data.recentEntries || data.recentEntries.length === 0))) {
+    publicSnapshot.innerHTML =
+      '<div class="public-snapshot-empty">Brak opublikowanego snapshotu. Po wygenerowaniu pliku i pushu będzie widoczny tutaj.</div>';
+    return;
+  }
+
+  const latestWeightValue = data.latestEntry ? formatKg(Number(data.latestEntry.weight)) : "Brak";
+  const latestDateValue = data.latestEntry ? formatDate(new Date(data.latestEntry.date)) : "Brak";
+  const deltaValue = data.latestEntry
+    ? formatSignedKg(Number(data.latestEntry.weight) - Number(data.startWeight))
+    : "-";
+
+  const recentList = (data.recentEntries || [])
+    .map(
+      (entry) => `
+        <li>
+          <strong>${formatKg(Number(entry.weight))}</strong>
+          <small>${formatDate(new Date(entry.date))}${entry.note ? ` · ${entry.note}` : ""}</small>
+        </li>
+      `
+    )
+    .join("");
+
+  publicSnapshot.innerHTML = `
+    <p class="section-label">Widok publiczny</p>
+    <h3>Ostatnio opublikowany progres</h3>
+    <div class="public-snapshot-grid">
+      <div class="snapshot-box">
+        <span>Ostatnia waga</span>
+        <strong>${latestWeightValue}</strong>
+      </div>
+      <div class="snapshot-box">
+        <span>Data wpisu</span>
+        <strong>${latestDateValue}</strong>
+      </div>
+      <div class="snapshot-box">
+        <span>Zmiana od startu</span>
+        <strong>${deltaValue}</strong>
+      </div>
+    </div>
+    <ul class="snapshot-list">${recentList}</ul>
+  `;
+}
+
+// Pobiera publiczny snapshot z pliku JSON opublikowanego razem ze stroną.
+async function loadPublishedProgress() {
+  try {
+    const response = await fetch(`${PUBLISHED_PROGRESS_URL}?t=${Date.now()}`, {
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      renderPublicSnapshot(null);
+      return;
+    }
+
+    const data = await response.json();
+    renderPublicSnapshot(data);
+  } catch {
+    renderPublicSnapshot(null);
+  }
 }
 
 // Renderuje główny kalkulator, podsumowania i cele miesięczne.
@@ -582,5 +673,26 @@ exportMonthlyTableButton.addEventListener("click", () => {
   URL.revokeObjectURL(url);
 });
 
+// Przygotowuje plik JSON z bieżącymi lokalnymi danymi do ręcznej publikacji.
+preparePublishDataButton.addEventListener("click", () => {
+  const state = getState();
+  const payload = buildPublishedPayload(state);
+  const blob = new Blob([JSON.stringify(payload, null, 2)], {
+    type: "application/json;charset=utf-8;",
+  });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "published-progress.json";
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+
+  publishStatus.textContent =
+    "Pobrano plik published-progress.json. Podmień nim plik w repo, zrób commit i push, a wszyscy zobaczą ten snapshot.";
+});
+
 initDefaults();
 render();
+loadPublishedProgress();
