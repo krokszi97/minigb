@@ -208,7 +208,7 @@ label {
 .hero-graphic {
   position: relative;
   flex: 1;
-  min-height: 240px;
+  min-height: 340px;
   border: 1px solid rgba(64, 42, 20, 0.12);
   border-radius: 32px;
   background:
@@ -298,7 +298,7 @@ label {
 .hero-metrics {
   left: 22px;
   right: 22px;
-  bottom: 96px;
+  bottom: 120px;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
@@ -319,7 +319,7 @@ label {
 .graphic-center {
   left: 34px;
   right: 34px;
-  bottom: 24px;
+  bottom: 18px;
   padding: 16px 18px;
   border-radius: 22px;
   background: rgba(255, 255, 255, 0.8);
@@ -752,6 +752,10 @@ canvas {
   .hero-visual {
     flex-basis: auto;
     min-height: auto;
+  }
+
+  .hero-graphic {
+    min-height: 380px;
   }
 
   .hero-badge {
