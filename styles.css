@@ -1,17 +1,17 @@
 /* GŁÓWNE ZMIENNE STYLU.
    Tu najszybciej zmienisz kolory, klimat i część layoutu bez dotykania reszty CSS. */
 :root {
-  --tlo: #919191;
-  --panel: rgba(255, 252, 247, 0.88);
-  --panel-mocny: #fffaf0;
-  --linia: rgba(94, 69, 44, 0.12);
-  --tekst: #3f332b;
-  --tekst-stonowany: #6d5a49;
-  --akcent: #db8f01ec;
-  --akcent-ciemny: #8c3e18;
-  --akcent-jasny: #f3d5bf;
-  --sukces: #00b16d;
-  --cien: 0 24px 50px rgba(76, 44, 22, 0.12);
+  --tlo: #091a2a;
+  --panel: rgba(12, 29, 43, 0.92);
+  --panel-mocny: rgba(14, 34, 50, 0.96);
+  --linia: rgba(109, 187, 192, 0.16);
+  --tekst: #f5f7fb;
+  --tekst-stonowany: #9fb9c9;
+  --akcent: #6dd3b6;
+  --akcent-ciemny: #0f7b6a;
+  --akcent-jasny: #d3fff5;
+  --sukces: #ffb45c;
+  --cien: 0 26px 52px rgba(0, 0, 0, 0.28);
 }
 
 html {
@@ -28,9 +28,9 @@ body {
   font-family: "Outfit", sans-serif;
   color: var(--tekst);
   background:
-    radial-gradient(circle at top left, rgba(232, 171, 97, 0.28), transparent 30%),
-    radial-gradient(circle at top right, rgba(144, 190, 165, 0.2), transparent 24%),
-    linear-gradient(180deg, #fdf8ef 0%, var(--tlo) 100%);
+    radial-gradient(circle at 18% 18%, rgba(109, 187, 192, 0.18), transparent 20%),
+    radial-gradient(circle at 82% 12%, rgba(255, 180, 92, 0.14), transparent 18%),
+    linear-gradient(180deg, #0b1a29 0%, #091a2a 100%);
 }
 
 body::before {
@@ -38,10 +38,10 @@ body::before {
   position: fixed;
   inset: 0;
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.45) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.45) 1px, transparent 1px);
-  background-size: 42px 42px;
-  opacity: 0.24;
+    linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 48px 48px;
+  opacity: 0.14;
   pointer-events: none;
 }
 
@@ -55,18 +55,23 @@ body::before {
 
 /* GÓRNA SEKCJA Z TYTUŁEM */
 .hero {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: minmax(320px, 1.1fr) minmax(320px, 0.9fr);
   gap: 24px;
   align-items: stretch;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
 }
 
 .hero-copy {
-  flex: 1 1 58%;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 18px;
+  padding: 22px 24px 20px;
+  border-radius: 32px;
+  background: rgba(15, 44, 61, 0.85);
+  border: 1px solid rgba(109, 187, 192, 0.14);
+  box-shadow: var(--cien);
 }
 
 .eyebrow,
@@ -145,39 +150,41 @@ h1 {
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
 }
 
 .hero-link {
-  padding: 10px 14px;
+  padding: 12px 18px;
   border-radius: 999px;
   text-decoration: none;
-  color: var(--akcent-ciemny);
-  background: rgba(255, 255, 255, 0.76);
-  border: 1px solid rgba(87, 60, 39, 0.12);
-  transition: transform 140ms ease, background 140ms ease;
+  color: var(--tekst);
+  background: rgba(109, 187, 192, 0.15);
+  border: 1px solid rgba(109, 187, 192, 0.22);
+  transition: transform 140ms ease, background 140ms ease, box-shadow 140ms ease;
 }
 
 .hero-link:hover {
   transform: translateY(-1px);
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(109, 187, 192, 0.24);
+  box-shadow: 0 10px 18px rgba(13, 33, 49, 0.18);
 }
 
 .hero-badge,
 .card {
-  border: 1px solid var(--linia);
-  background: var(--panel);
-  backdrop-filter: blur(14px);
+  border: 1px solid rgba(109, 187, 192, 0.18);
+  background: var(--panel-mocny);
+  backdrop-filter: blur(18px);
   box-shadow: var(--cien);
 }
 
 .hero-badge {
   min-width: 180px;
-  padding: 18px 20px;
+  padding: 18px 22px;
   border-radius: 26px;
   text-align: right;
   position: relative;
   z-index: 2;
+  background: rgba(13, 33, 49, 0.94);
 }
 
 .hero-badge span,
@@ -196,7 +203,6 @@ label {
 }
 
 .hero-visual {
-  flex: 0 0 min(420px, 38%);
   position: relative;
   min-height: 320px;
   display: flex;
@@ -208,15 +214,13 @@ label {
 .hero-graphic {
   position: relative;
   flex: 1;
-  min-height: 340px;
-  border: 1px solid rgba(64, 42, 20, 0.12);
+  min-height: 360px;
   border-radius: 32px;
-  background:
-    radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.78), transparent 28%),
-    linear-gradient(160deg, rgba(255, 241, 227, 0.92) 0%, rgba(252, 226, 203, 0.78) 100%);
+  background: linear-gradient(160deg, rgba(13, 33, 49, 0.96) 0%, rgba(10, 22, 34, 0.98) 100%);
+  border: 1px solid rgba(109, 187, 192, 0.18);
   box-shadow: var(--cien);
   overflow: hidden;
-  padding: 22px;
+  padding: 24px;
 }
 
 .progress-header,
@@ -251,14 +255,14 @@ label {
   top: 108px;
   height: 12px;
   border-radius: 999px;
-  background: rgba(140, 62, 24, 0.1);
+  background: rgba(109, 187, 192, 0.16);
 }
 
 .progress-fill {
   position: absolute;
   inset: 0 26% 0 0;
   border-radius: 999px;
-  background: linear-gradient(90deg, rgba(0, 177, 109, 0.72), rgba(201, 111, 58, 0.85));
+  background: linear-gradient(90deg, rgba(109, 187, 192, 0.9), rgba(59, 153, 190, 0.95));
 }
 
 .progress-milestone {
@@ -268,9 +272,9 @@ label {
   width: 22px;
   height: 22px;
   border-radius: 999px;
-  background: #fffaf5;
-  border: 2px solid rgba(140, 62, 24, 0.32);
-  box-shadow: 0 6px 14px rgba(76, 44, 22, 0.08);
+  background: rgba(15, 44, 61, 0.95);
+  border: 2px solid rgba(109, 187, 192, 0.24);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
 }
 
 .progress-milestone span {
@@ -279,7 +283,7 @@ label {
   left: 50%;
   transform: translateX(-50%);
   font-size: 0.78rem;
-  color: var(--akcent-ciemny);
+  color: var(--akcent-jasny);
   font-weight: 700;
 }
 
@@ -307,8 +311,8 @@ label {
 .metric-chip {
   padding: 12px 14px;
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(87, 60, 39, 0.1);
+  background: rgba(15, 44, 61, 0.7);
+  border: 1px solid rgba(109, 187, 192, 0.18);
 }
 
 .metric-chip strong {
@@ -322,8 +326,8 @@ label {
   bottom: 18px;
   padding: 16px 18px;
   border-radius: 22px;
-  background: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(87, 60, 39, 0.1);
+  background: rgba(15, 44, 61, 0.88);
+  border: 1px solid rgba(109, 187, 192, 0.18);
 }
 
 .graphic-center-wide {
@@ -381,32 +385,33 @@ button {
 
 input {
   width: 100%;
-  border: 1px solid rgba(87, 60, 39, 0.18);
-  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(109, 187, 192, 0.2);
+  background: rgba(255, 255, 255, 0.08);
   color: var(--tekst);
   padding: 14px 16px;
   border-radius: 16px;
   outline: none;
-  transition: border-color 140ms ease, transform 140ms ease, box-shadow 140ms ease;
+  transition: border-color 140ms ease, transform 140ms ease, box-shadow 140ms ease, background 140ms ease;
 }
 
 input:focus {
-  border-color: var(--akcent);
-  box-shadow: 0 0 0 4px rgba(201, 111, 58, 0.14);
+  border-color: rgba(109, 187, 192, 0.8);
+  box-shadow: 0 0 0 4px rgba(109, 187, 192, 0.16);
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .assumption-box,
 .chart-card,
 .projection-card,
 .note-card {
-  background: var(--panel-mocny);
+  background: rgba(15, 44, 61, 0.8);
 }
 
 .assumption-box {
   margin-top: 18px;
-  padding: 16px 18px;
+  padding: 18px 20px;
   border-radius: 22px;
-  border: 1px solid rgba(87, 60, 39, 0.08);
+  border: 1px solid rgba(109, 187, 192, 0.16);
 }
 
 .assumption-box p,
@@ -424,13 +429,13 @@ input:focus {
 }
 
 .projection-card {
-  border: 1px solid rgba(87, 60, 39, 0.08);
+  border: 1px solid rgba(109, 187, 192, 0.16);
   border-radius: 22px;
   padding: 18px;
 }
 
 .projection-card.highlight {
-  background: linear-gradient(160deg, #fff3e6 0%, #fde6cf 100%);
+  background: linear-gradient(160deg, rgba(109, 187, 192, 0.14), rgba(34, 113, 148, 0.22));
 }
 
 .projection-main {
@@ -479,8 +484,8 @@ input:focus {
   align-items: center;
   padding: 14px 16px;
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.68);
-  border: 1px solid rgba(87, 60, 39, 0.08);
+  background: rgba(109, 187, 192, 0.12);
+  border: 1px solid rgba(109, 187, 192, 0.18);
 }
 
 /* SIATKA CELÓW MIESIĘCZNYCH */
@@ -497,8 +502,8 @@ input:focus {
   gap: 12px;
   padding: 12px 14px;
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(87, 60, 39, 0.08);
+  background: rgba(109, 187, 192, 0.08);
+  border: 1px solid rgba(109, 187, 192, 0.14);
 }
 
 .goal-item span {
@@ -524,20 +529,20 @@ input:focus {
   border-radius: 16px;
   padding: 14px 18px;
   cursor: pointer;
-  transition: transform 140ms ease, opacity 140ms ease, box-shadow 140ms ease;
+  transition: transform 140ms ease, opacity 140ms ease, box-shadow 140ms ease, background 140ms ease;
 }
 
 .primary-button {
-  background: linear-gradient(135deg, var(--akcent) 0%, #dd8e58 100%);
-  color: #fff8f3;
+  background: linear-gradient(135deg, #5bd3b2 0%, #2d96b6 100%);
+  color: #f8fcff;
   font-weight: 700;
-  box-shadow: 0 16px 28px rgba(201, 111, 58, 0.26);
+  box-shadow: 0 16px 28px rgba(0, 0, 0, 0.24);
 }
 
 .ghost-button {
-  background: rgba(255, 255, 255, 0.7);
-  color: var(--akcent-ciemny);
-  border: 1px solid rgba(87, 60, 39, 0.1);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--tekst);
+  border: 1px solid rgba(109, 187, 192, 0.24);
 }
 
 button:hover {
@@ -554,8 +559,8 @@ button:hover {
 .stats-strip > div {
   padding: 14px 16px;
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(87, 60, 39, 0.08);
+  background: rgba(109, 187, 192, 0.1);
+  border: 1px solid rgba(109, 187, 192, 0.16);
 }
 
 .stats-strip span,
@@ -571,10 +576,10 @@ button:hover {
 .publish-card,
 .public-snapshot {
   margin-bottom: 18px;
-  padding: 16px;
+  padding: 18px;
   border-radius: 24px;
-  border: 1px solid rgba(87, 60, 39, 0.08);
-  background: var(--panel-mocny);
+  border: 1px solid rgba(109, 187, 192, 0.16);
+  background: rgba(15, 44, 61, 0.82);
 }
 
 .publish-card {
@@ -769,8 +774,8 @@ canvas {
   align-items: center;
   padding: 14px 16px;
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(87, 60, 39, 0.08);
+  background: rgba(15, 44, 61, 0.7);
+  border: 1px solid rgba(109, 187, 192, 0.14);
 }
 
 .entry-main {
