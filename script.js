@@ -37,6 +37,13 @@ const entryDateInput = document.querySelector("#entryDate");
 const entryWeightInput = document.querySelector("#entryWeight");
 const entryNoteInput = document.querySelector("#entryNote");
 
+const bmiWeightInput = document.querySelector("#bmiWeight");
+const bmiHeightInput = document.querySelector("#bmiHeight");
+const bmiSexSelect = document.querySelector("#bmiSex");
+const bmiValue = document.querySelector("#bmiValue");
+const bmiCategory = document.querySelector("#bmiCategory");
+const bmiDescription = document.querySelector("#bmiDescription");
+
 const heroStartWeight = document.querySelector("#heroStartWeight");
 const todayWeight = document.querySelector("#todayWeight");
 const weight6m = document.querySelector("#weight6m");
@@ -85,6 +92,92 @@ function formatKg(value) {
 function formatSignedKg(value) {
   const prefix = value > 0 ? "+" : "";
   return `${prefix}${value.toFixed(1)} kg`;
+}
+
+function getBMICategory(bmi, sex) {
+  if (bmi < 18.5) {
+    return {
+      label: "Niedowaga",
+      note: "Warto skonsultować dietę i aktywność fizyczną.",
+    };
+  }
+  if (bmi < 25) {
+    return {
+      label: "Prawidłowa masa ciała",
+      note: sex === "female"
+        ? "Dobra kondycja dla kobiety, monitoruj regularnie obwód talii."
+        : "Dobra kondycja dla mężczyzny, utrzymuj aktywność."
+    };
+  }
+  if (bmi < 30) {
+    return {
+      label: "Nadwaga",
+      note: "Warto kontynuować redukcję masy i obserwować osiągnięcia.",
+    };
+  }
+  if (bmi < 35) {
+    return {
+      label: "Otyłość I stopnia",
+      note: "Rzetelne monitorowanie i wsparcie medyczne są zalecane.",
+    };
+  }
+  if (bmi < 40) {
+    return {
+      label: "Otyłość II stopnia",
+      note: "Konieczne jest dalsze wsparcie specjalistyczne i kontrola żywienia.",
+    };
+  }
+
+  return {
+    label: "Otyłość III stopnia",
+    note: "To najwyższy stopień otyłości; skonsultuj się z lekarzem.",
+  };
+}
+
+function calculateBMI(weightKg, heightCm) {
+  const heightM = heightCm / 100;
+  return heightM > 0 ? weightKg / (heightM * heightM) : 0;
+}
+
+function updateBMI() {
+  if (!bmiWeightInput || !bmiHeightInput || !bmiSexSelect) {
+    return;
+  }
+
+  const weight = Number(bmiWeightInput.value) || 0;
+  const height = Number(bmiHeightInput.value) || 0;
+  const sex = bmiSexSelect.value;
+
+  if (weight <= 0 || height <= 0) {
+    bmiValue.textContent = "—";
+    bmiCategory.textContent = "Podaj wagę i wzrost";
+    bmiDescription.textContent = "BMI jest przydatnym wskaźnikiem przy odpowiedniej masie ciała i wzroście.";
+    return;
+  }
+
+  const bmi = calculateBMI(weight, height);
+  const rounded = bmi.toFixed(1);
+  const category = getBMICategory(bmi, sex);
+
+  bmiValue.textContent = rounded;
+  bmiCategory.textContent = category.label;
+  bmiDescription.textContent = category.note;
+}
+
+function renderBMI(state) {
+  if (!bmiWeightInput || !bmiHeightInput || !bmiSexSelect) {
+    return;
+  }
+
+  if (!bmiWeightInput.value || Number(bmiWeightInput.value) === 0) {
+    bmiWeightInput.value = state.startWeight || 130;
+  }
+
+  if (!bmiHeightInput.value || Number(bmiHeightInput.value) === 0) {
+    bmiHeightInput.value = 170;
+  }
+
+  updateBMI();
 }
 
 // Formatuje datę pod polski zapis dzienny.
@@ -431,6 +524,8 @@ function renderCalculator(state) {
   month6Label.textContent = formatDate(addMonths(surgeryDate, 6));
   month12Label.textContent = formatDate(addMonths(surgeryDate, 12));
 
+  renderBMI(state);
+
   if (monthlyGoals) {
     monthlyGoals.innerHTML = "";
     for (let month = 1; month <= 12; month += 1) {
@@ -704,6 +799,12 @@ calculatorForm.addEventListener("input", () => {
 
   render();
 });
+
+if (bmiWeightInput && bmiHeightInput && bmiSexSelect) {
+  bmiWeightInput.addEventListener("input", updateBMI);
+  bmiHeightInput.addEventListener("input", updateBMI);
+  bmiSexSelect.addEventListener("change", updateBMI);
+}
 
 // Dodaje nowy wpis do trackera.
 entryForm.addEventListener("submit", (event) => {

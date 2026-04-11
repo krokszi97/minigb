@@ -201,6 +201,47 @@
             </p>
           </div>
 
+          <div class="bmi-panel">
+            <div class="bmi-panel-head">
+              <div>
+                <p class="section-label">Kalkulator BMI</p>
+                <h3>Rzetelne dopasowanie dla kobiet i mężczyzn</h3>
+              </div>
+            </div>
+
+            <form id="bmiForm" class="form-grid">
+              <label>
+                Waga (kg)
+                <input id="bmiWeight" type="number" min="40" max="250" step="0.1" value="130" />
+              </label>
+              <label>
+                Wzrost (cm)
+                <input id="bmiHeight" type="number" min="120" max="230" step="0.1" value="170" />
+              </label>
+              <label class="full-span">
+                Płeć
+                <select id="bmiSex">
+                  <option value="male">Mężczyzna</option>
+                  <option value="female">Kobieta</option>
+                </select>
+              </label>
+            </form>
+
+            <div class="bmi-result">
+              <div class="bmi-result-number">
+                <span class="section-label">Twój BMI</span>
+                <strong id="bmiValue">—</strong>
+              </div>
+              <div class="bmi-result-meta">
+                <span>Interpretacja</span>
+                <strong id="bmiCategory">Podaj dane, aby obliczyć wynik</strong>
+              </div>
+              <p id="bmiDescription" class="bmi-description">
+                BMI pomaga ocenić proporcje masy ciała. Uwzględnia płeć oraz aktualny ciężar.
+              </p>
+            </div>
+          </div>
+
           <div class="projection-grid">
             <article class="projection-card">
               <p class="projection-label">6 miesięcy</p>
