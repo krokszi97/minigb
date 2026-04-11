@@ -52,7 +52,7 @@ body::before {
   position: relative;
   max-width: 1240px;
   margin: 0 auto;
-  padding: 20px 20px 48px;
+  padding: 12px 20px 48px;
 }
 
 /* NAWIGACJA */
@@ -137,8 +137,8 @@ body::before {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 18px;
-  padding: 24px 26px 22px;
+  gap: 12px;
+  padding: 20px 26px 22px;
   border-radius: 32px;
   background: rgba(255, 255, 255, 0.96);
   border: 1px solid rgba(143, 188, 219, 0.26);
