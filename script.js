@@ -431,15 +431,17 @@ function renderCalculator(state) {
   month6Label.textContent = formatDate(addMonths(surgeryDate, 6));
   month12Label.textContent = formatDate(addMonths(surgeryDate, 12));
 
-  monthlyGoals.innerHTML = "";
-  for (let month = 1; month <= 12; month += 1) {
-    const item = document.createElement("div");
-    item.className = "goal-item";
-    item.innerHTML = `
-      <span>${APP_TEXT.monthLabel} ${month} · ${formatDate(addMonths(surgeryDate, month))}</span>
-      <strong>${formatKg(interpolateWeight(startWeight, month))}</strong>
-    `;
-    monthlyGoals.appendChild(item);
+  if (monthlyGoals) {
+    monthlyGoals.innerHTML = "";
+    for (let month = 1; month <= 12; month += 1) {
+      const item = document.createElement("div");
+      item.className = "goal-item";
+      item.innerHTML = `
+        <span>${APP_TEXT.monthLabel} ${month} · ${formatDate(addMonths(surgeryDate, month))}</span>
+        <strong>${formatKg(interpolateWeight(startWeight, month))}</strong>
+      `;
+      monthlyGoals.appendChild(item);
+    }
   }
 }
 
