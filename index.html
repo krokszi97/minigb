@@ -36,8 +36,9 @@
     </nav>
     <main class="app-shell">
       <!-- SEKCJA HERO: tutaj najłatwiej zmienisz główny nagłówek i opis -->
-      <section class="hero section active" id="home">
-        <div class="hero-copy">
+      <section class="page section active" id="home">
+        <div class="hero">
+          <div class="hero-copy">
           <p class="eyebrow">MGB / OAGB</p>
           <h1>MiniGB - kalkulator i tracker postępów</h1>
           <p class="hero-text">
@@ -70,7 +71,7 @@
           <div class="hero-actions">
             <a class="hero-link" href="#plan-roczny">Plan 12 miesięcy</a>
             <a class="hero-link" href="#tracker">Tracker postępów</a>
-            <a class="hero-link" href="#tabela-miesieczna">Tabela ręczna</a>
+            <a class="hero-link" href="#tabela">Tabela ręczna</a>
           </div>
 
           <div class="stepper-panel">
@@ -159,9 +160,7 @@
             </div>
           </div>
         </div>
-      </section>
 
-      <section class="grid">
         <!-- KOLUMNA LEWA: kalkulator i plan miesięczny -->
         <article class="card calculator-card reveal-card" id="plan-roczny">
           <div class="card-head">
@@ -237,9 +236,9 @@
             <div id="monthlyGoals" class="monthly-goals"></div>
           </div>
         </article>
-
-        <!-- NOWA SEKCJA: OBWODY CIAŁA -->
-        <article class="card obwody-card reveal-card section" id="obwody">
+      </section>
+      <section class="page section" id="obwody">
+        <article class="card obwody-card reveal-card">
           <div class="card-head">
             <div>
               <p class="section-label">Obwody</p>
@@ -284,9 +283,9 @@
 
           <div id="obwodyList" class="entry-list"></div>
         </article>
-
-        <!-- KOLUMNA PRAWA: tracker, statystyki i wykres -->
-        <article class="card tracker-card reveal-card section" id="tracker">
+      </section>
+      <section class="page section" id="tracker">
+        <article class="card tracker-card reveal-card">
           <div class="card-head">
             <div>
               <p class="section-label">Tracker</p>
@@ -352,33 +351,34 @@
             <canvas id="progressChart" width="860" height="340" aria-label="Wykres postępów"></canvas>
           </div>
 
-          <div class="monthly-table-card reveal-card section" id="tabela">
-            <div class="card-head monthly-table-head">
-              <div>
-                <p class="section-label">Tabela</p>
-                <h3>Progres miesiąc po miesiącu</h3>
-              </div>
-              <div class="table-actions">
-                <button id="exportMonthlyTable" class="ghost-button" type="button">Eksport CSV</button>
-                <button id="resetMonthlyTable" class="ghost-button" type="button">Reset tabeli</button>
-              </div>
-            </div>
-            <div class="table-wrap">
-              <table class="monthly-progress-table">
-                <thead>
-                  <tr>
-                    <th>Miesiąc</th>
-                    <th>Data</th>
-                    <th>Waga</th>
-                    <th>Notatka</th>
-                  </tr>
-                </thead>
-                <tbody id="monthlyProgressBody"></tbody>
-              </table>
-            </div>
-          </div>
-
           <div id="entryList" class="entry-list"></div>
+        </article>
+      </section>
+      <section class="page section" id="tabela">
+        <article class="card monthly-table-card reveal-card">
+        <div class="card-head monthly-table-head">
+          <div>
+            <p class="section-label">Tabela</p>
+            <h3>Progres miesiąc po miesiącu</h3>
+          </div>
+          <div class="table-actions">
+            <button id="exportMonthlyTable" class="ghost-button" type="button">Eksport CSV</button>
+            <button id="resetMonthlyTable" class="ghost-button" type="button">Reset tabeli</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="monthly-progress-table">
+            <thead>
+              <tr>
+                <th>Miesiąc</th>
+                <th>Data</th>
+                <th>Waga</th>
+                <th>Notatka</th>
+              </tr>
+            </thead>
+            <tbody id="monthlyProgressBody"></tbody>
+          </table>
+        </div>
         </article>
       </section>
 
