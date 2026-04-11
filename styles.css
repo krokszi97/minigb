@@ -305,19 +305,25 @@ label {
   box-shadow: var(--cien);
   overflow: hidden;
   padding: 26px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
 }
 
 .progress-header,
 .progress-track,
 .hero-metrics,
-.graphic-center {
-  position: absolute;
+.graphic-center,
+.graphic-hub {
+  position: relative;
+  top: auto;
+  left: auto;
+  right: auto;
+  bottom: auto;
 }
 
 .progress-header {
-  top: 22px;
-  left: 22px;
-  right: 22px;
+  margin: 0;
 }
 
 .progress-header span,
@@ -334,9 +340,6 @@ label {
 }
 
 .progress-track {
-  left: 28px;
-  right: 28px;
-  top: 98px;
   height: 12px;
   border-radius: 999px;
   background: rgba(109, 187, 192, 0.16);
@@ -350,10 +353,6 @@ label {
 }
 
 .graphic-hub {
-  position: absolute;
-  left: 28px;
-  right: 28px;
-  top: 134px;
   padding: 22px;
   border-radius: 28px;
   background: rgba(255, 255, 255, 0.95);
@@ -449,9 +448,6 @@ label {
 }
 
 .hero-metrics {
-  left: 22px;
-  right: 22px;
-  bottom: 120px;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
@@ -470,9 +466,6 @@ label {
 }
 
 .graphic-center {
-  left: 34px;
-  right: 34px;
-  bottom: 18px;
   padding: 16px 18px;
   border-radius: 22px;
   background: rgba(255, 255, 255, 0.95);
