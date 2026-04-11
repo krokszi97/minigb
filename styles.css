@@ -736,10 +736,22 @@ input:focus {
 }
 
 .assumption-box {
-  margin-top: 18px;
   padding: 18px 20px;
   border-radius: 22px;
   border: 1px solid rgba(143, 188, 219, 0.24);
+}
+
+.forecast-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 18px;
+}
+
+@media (max-width: 860px) {
+  .forecast-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .bmi-panel {
