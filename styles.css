@@ -676,6 +676,43 @@ label {
   background: var(--panel);
 }
 
+.card-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.card-move-btn {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid rgba(59, 129, 185, 0.3);
+  background: rgba(59, 129, 185, 0.08);
+  border-radius: 8px;
+  color: var(--akcent);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 140ms ease, border-color 140ms ease;
+}
+
+.card-move-btn:hover {
+  background: rgba(59, 129, 185, 0.16);
+  border-color: rgba(59, 129, 185, 0.5);
+}
+
+article[draggable="true"] {
+  cursor: move;
+}
+
+article.dragging {
+  opacity: 0.5;
+  transform: scale(0.98);
+}
+
+article.drag-over {
+  opacity: 0.8;
+  border: 2px dashed var(--akcent);
+}
+
 .card-head {
   display: flex;
   align-items: center;
