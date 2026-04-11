@@ -128,12 +128,14 @@ body::before {
 .hero {
   display: grid;
   grid-template-columns: minmax(320px, 1.1fr) minmax(320px, 0.9fr);
+  grid-template-areas: "copy visual";
   gap: 24px;
   align-items: start;
   margin-bottom: 0;
 }
 
 .hero-copy {
+  grid-area: copy;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -143,6 +145,10 @@ body::before {
   background: rgba(255, 255, 255, 0.96);
   border: 1px solid rgba(143, 188, 219, 0.26);
   box-shadow: var(--cien);
+}
+
+.hero-visual {
+  grid-area: visual;
 }
 
 .eyebrow,
