@@ -1409,6 +1409,106 @@ canvas {
   color: var(--akcent-ciemny);
 }
 
+/* SEKCJA ANALIZY TRENDÓW */
+.trends-card {
+  background: linear-gradient(135deg, var(--panel) 0%, rgba(59, 145, 197, 0.08) 100%);
+}
+
+.trends-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--tekst-stonowany);
+}
+
+.trends-analysis {
+  display: block;
+}
+
+.trend-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.trend-stat {
+  background: var(--panel-mocny);
+  padding: 20px;
+  border-radius: 16px;
+  text-align: center;
+  border: 1px solid var(--linia);
+}
+
+.trend-stat span {
+  display: block;
+  font-size: 14px;
+  color: var(--tekst-stonowany);
+  margin-bottom: 8px;
+}
+
+.trend-stat strong {
+  display: block;
+  font-size: 24px;
+  color: var(--akcent);
+  font-weight: 600;
+}
+
+.trend-chart-container {
+  background: var(--panel-mocny);
+  padding: 20px;
+  border-radius: 16px;
+  margin-bottom: 32px;
+  border: 1px solid var(--linia);
+}
+
+.trend-insights {
+  background: var(--panel-mocny);
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px solid var(--linia);
+}
+
+.trend-insights h3 {
+  margin: 0 0 16px 0;
+  color: var(--tekst);
+  font-size: 18px;
+}
+
+.insights-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.insight-item {
+  background: linear-gradient(135deg, rgba(59, 145, 197, 0.1) 0%, rgba(59, 145, 197, 0.05) 100%);
+  padding: 16px;
+  border-radius: 12px;
+  border-left: 4px solid var(--akcent);
+}
+
+.insight-item.strong {
+  border-left-color: var(--sukces);
+  background: linear-gradient(135deg, rgba(64, 175, 127, 0.1) 0%, rgba(64, 175, 127, 0.05) 100%);
+}
+
+.insight-item.warning {
+  border-left-color: #ff9800;
+  background: linear-gradient(135deg, rgba(255, 152, 0, 0.1) 0%, rgba(255, 152, 0, 0.05) 100%);
+}
+
+.insight-title {
+  font-weight: 600;
+  color: var(--tekst);
+  margin-bottom: 4px;
+}
+
+.insight-text {
+  color: var(--tekst-stonowany);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
 /* KARTY NA STRONIE GŁÓWNEJ */
 #home .card {
   opacity: 0;

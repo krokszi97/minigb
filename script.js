@@ -4,6 +4,52 @@ const MONTHLY_TABLE_KEY = "mgb-manual-monthly-table-v1";
 const OBWODY_KEY = "mgb-obwody-tracker-v1";
 const PUBLISHED_PROGRESS_URL = "published-progress.json";
 
+// Nowa baza danych IndexedDB z Dexie.js
+const db = new Dexie('MiniGB');
+
+// Definiuję tabele: entries (wpisy), obwody (obwody ciała), monthlyTable (tabela miesięczna), settings (ustawienia)
+db.version(1).stores({
+  entries: '++id, date, weight, note',  // id auto, data, waga, notatka
+  obwody: '++id, date, talia, biodra, ramie, uda, note',  // id auto, data, obwody, notatka
+  monthlyTable: '++id, month, weight, note',  // id auto, miesiąc, waga, notatka
+  settings: 'key, value'  // klucz, wartość dla ustawień
+});
+
+// Funkcje do obsługi bazy danych
+async function saveEntry(entry) {
+  await db.entries.add(entry);
+}
+
+async function loadEntries() {
+  return await db.entries.toArray();
+}
+
+async function saveObwody(obwody) {
+  await db.obwody.add(obwody);
+}
+
+async function loadObwody() {
+  return await db.obwody.toArray();
+}
+
+async function saveMonthlyTable(rows) {
+  await db.monthlyTable.clear();  // Wyczyść starą tabelę
+  await db.monthlyTable.bulkAdd(rows);
+}
+
+async function loadMonthlyTable() {
+  return await db.monthlyTable.toArray();
+}
+
+async function getSetting(key, defaultValue) {
+  const item = await db.settings.get(key);
+  return item ? item.value : defaultValue;
+}
+
+async function setSetting(key, value) {
+  await db.settings.put({ key, value });
+}
+
 // Najważniejsze teksty interfejsu do ręcznej edycji.
 const APP_TEXT = {
   emptyStateTitle: "Brak wpisów",
@@ -218,8 +264,8 @@ function interpolateWeight(startWeight, month) {
   return calculateProjection(startWeight, twlAtSix + extraFraction).finalWeight;
 }
 
-// Pobiera aktualny stan aplikacji z localStorage.
-function getState() {
+// Pobiera aktualny stan aplikacji z IndexedDB.
+async function getState() {
   const fallback = {
     startWeight: 130,
     surgeryDate: isoDate(new Date()),
@@ -227,24 +273,27 @@ function getState() {
   };
 
   try {
-    const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    if (!parsed) {
-      return fallback;
-    }
-
+    const entries = await loadEntries();
+    const startWeight = await getSetting('startWeight', fallback.startWeight);
+    const surgeryDate = await getSetting('surgeryDate', fallback.surgeryDate);
     return {
-      startWeight: Number(parsed.startWeight) || fallback.startWeight,
-      surgeryDate: parsed.surgeryDate || fallback.surgeryDate,
-      entries: Array.isArray(parsed.entries) ? parsed.entries : [],
+      startWeight: Number(startWeight),
+      surgeryDate,
+      entries,
     };
   } catch {
     return fallback;
   }
 }
 
-// Zapisuje cały stan aplikacji do localStorage.
-function setState(nextState) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(nextState));
+// Zapisuje cały stan aplikacji do IndexedDB.
+async function setState(nextState) {
+  // Zapisz entries
+  await db.entries.clear();
+  await db.entries.bulkAdd(nextState.entries);
+  // Zapisz ustawienia
+  await setSetting('startWeight', nextState.startWeight);
+  await setSetting('surgeryDate', nextState.surgeryDate);
 }
 
 // Buduje ręczną tabelę do własnego uzupełniania od dnia operacji do 12 miesięcy dalej.
@@ -266,10 +315,10 @@ function buildManualMonthlyRows(surgeryDate) {
   return rows;
 }
 
-// Pobiera ręczną tabelę miesięczną z localStorage albo odtwarza ją od nowa.
-function getManualMonthlyTable(state) {
+// Pobiera ręczną tabelę miesięczną z IndexedDB albo odtwarza ją od nowa.
+async function getManualMonthlyTable(state) {
   try {
-    const parsed = JSON.parse(localStorage.getItem(MONTHLY_TABLE_KEY));
+    const parsed = await loadMonthlyTable();
     if (Array.isArray(parsed) && parsed.length > 0) {
       return syncManualTableStartRow(parsed, state);
     }
@@ -281,8 +330,8 @@ function getManualMonthlyTable(state) {
 }
 
 // Zapisuje ręcznie edytowalną tabelę miesięczną.
-function setManualMonthlyTable(rows) {
-  localStorage.setItem(MONTHLY_TABLE_KEY, JSON.stringify(rows));
+async function setManualMonthlyTable(rows) {
+  await saveMonthlyTable(rows);
 }
 
 // Aktualizuje pierwszy wiersz tabeli do bieżącej daty operacji i wagi startowej.
@@ -389,19 +438,19 @@ function renderPublicSnapshot(data) {
   `;
 }
 
-// Pobiera dane obwodów z localStorage.
-function getObwodyState() {
+// Pobiera dane obwodów z IndexedDB.
+async function getObwodyState() {
   try {
-    const parsed = JSON.parse(localStorage.getItem(OBWODY_KEY));
-    return Array.isArray(parsed) ? parsed : [];
+    return await loadObwody();
   } catch {
     return [];
   }
 }
 
-// Zapisuje dane obwodów do localStorage.
-function setObwodyState(obwody) {
-  localStorage.setItem(OBWODY_KEY, JSON.stringify(obwody));
+// Zapisuje dane obwodów do IndexedDB.
+async function setObwodyState(obwody) {
+  await db.obwody.clear();
+  await db.obwody.bulkAdd(obwody);
 }
 
 // Sortuje obwody rosnąco po dacie.
@@ -410,8 +459,9 @@ function getSortedObwody(obwody) {
 }
 
 // Renderuje listę obwodów.
-function renderObwody() {
-  const obwody = getSortedObwody(getObwodyState()).reverse();
+async function renderObwody() {
+  const obwodyState = await getObwodyState();
+  const obwody = getSortedObwody(obwodyState).reverse();
   obwodyList.innerHTML = "";
 
   if (obwody.length === 0) {
@@ -438,18 +488,18 @@ function renderObwody() {
 }
 
 // Dodaje nowy wpis obwodów.
-function addObwodyEntry(entry) {
-  const obwody = getObwodyState();
+async function addObwodyEntry(entry) {
+  const obwody = await getObwodyState();
   obwody.push(entry);
-  setObwodyState(obwody);
-  renderObwody();
+  await setObwodyState(obwody);
+  await renderObwody();
 }
 
 // Usuwa wpis obwodów.
-function removeObwodyEntry(id) {
-  const obwody = getObwodyState().filter((entry) => entry.id !== id);
-  setObwodyState(obwody);
-  renderObwody();
+async function removeObwodyEntry(id) {
+  const obwody = (await getObwodyState()).filter((entry) => entry.id !== id);
+  await setObwodyState(obwody);
+  await renderObwody();
 }
 
 // Eksportuje obwody do PDF.
@@ -770,8 +820,8 @@ function renderEntries(state) {
 }
 
 // Odpala pełne odświeżenie widoku po zmianie danych.
-function render() {
-  const state = getState();
+async function render() {
+  const state = await getState();
   startWeightInput.value = state.startWeight;
   surgeryDateInput.value = state.surgeryDate;
 
@@ -782,18 +832,18 @@ function render() {
 }
 
 // Aktualizuje kalkulator na żywo po zmianie pól formularza.
-calculatorForm.addEventListener("input", () => {
-  const nextState = getState();
+calculatorForm.addEventListener("input", async () => {
+  const nextState = await getState();
   const previousSurgeryDate = nextState.surgeryDate;
   nextState.startWeight = Number(startWeightInput.value) || 130;
   nextState.surgeryDate = surgeryDateInput.value || "2026-04-21";
-  setState(nextState);
+  await setState(nextState);
 
   if (nextState.surgeryDate !== previousSurgeryDate) {
-    setManualMonthlyTable(buildManualMonthlyRows(nextState.surgeryDate));
+    await setManualMonthlyTable(buildManualMonthlyRows(nextState.surgeryDate));
   }
 
-  render();
+  await render();
 });
 
 if (bmiWeightInput && bmiHeightInput) {
@@ -802,10 +852,10 @@ if (bmiWeightInput && bmiHeightInput) {
 }
 
 // Dodaje nowy wpis do trackera.
-entryForm.addEventListener("submit", (event) => {
+entryForm.addEventListener("submit", async (event) => {
   event.preventDefault();
 
-  const nextState = getState();
+  const nextState = await getState();
   const entry = {
     id: crypto.randomUUID(),
     date: entryDateInput.value,
@@ -814,59 +864,59 @@ entryForm.addEventListener("submit", (event) => {
   };
 
   nextState.entries.push(entry);
-  setState(nextState);
+  await setState(nextState);
 
   entryForm.reset();
   entryDateInput.value = isoDate(new Date());
-  render();
+  await render();
 });
 
 // Usuwa pojedynczy wpis po kliknięciu przycisku.
-entryList.addEventListener("click", (event) => {
+entryList.addEventListener("click", async (event) => {
   const button = event.target.closest(".entry-delete");
   if (!button) {
     return;
   }
 
-  const nextState = getState();
+  const nextState = await getState();
   nextState.entries = nextState.entries.filter((entry) => entry.id !== button.dataset.id);
-  setState(nextState);
-  render();
+  await setState(nextState);
+  await render();
 });
 
 // Czyści całą historię wpisów.
-clearEntriesButton.addEventListener("click", () => {
-  const nextState = getState();
+clearEntriesButton.addEventListener("click", async () => {
+  const nextState = await getState();
   nextState.entries = [];
-  setState(nextState);
-  render();
+  await setState(nextState);
+  await render();
 });
 
 // Ustawia wartości startowe przy pierwszym otwarciu strony.
-function initDefaults() {
-  const state = getState();
+async function initDefaults() {
+  const state = await getState();
   state.surgeryDate = "2026-04-21";
 
-  setState(state);
-  const rows = getManualMonthlyTable(state);
+  await setState(state);
+  const rows = await getManualMonthlyTable(state);
   if (!manualTableMatchesSurgeryDate(rows, state.surgeryDate)) {
-    setManualMonthlyTable(buildManualMonthlyRows(state.surgeryDate));
+    await setManualMonthlyTable(buildManualMonthlyRows(state.surgeryDate));
   } else {
-    setManualMonthlyTable(rows);
+    await setManualMonthlyTable(rows);
   }
   entryDateInput.value = isoDate(new Date());
   obwodyDateInput.value = isoDate(new Date());
 }
 
 // Zapisuje każdą zmianę w ręcznej tabeli od razu po wpisaniu.
-monthlyProgressBody.addEventListener("input", (event) => {
+monthlyProgressBody.addEventListener("input", async (event) => {
   const input = event.target.closest(".monthly-input");
   if (!input) {
     return;
   }
 
-  const state = getState();
-  const rows = getManualMonthlyTable(state).map((row) => {
+  const state = await getState();
+  const rows = (await getManualMonthlyTable(state)).map((row) => {
     if (row.id !== input.dataset.id) {
       return row;
     }
@@ -877,14 +927,14 @@ monthlyProgressBody.addEventListener("input", (event) => {
     };
   });
 
-  setManualMonthlyTable(rows);
+  await setManualMonthlyTable(rows);
 });
 
 // Resetuje tylko ręczną tabelę miesięczną.
-resetMonthlyTableButton.addEventListener("click", () => {
-  const state = getState();
-  setManualMonthlyTable(buildManualMonthlyRows(state.surgeryDate));
-  render();
+resetMonthlyTableButton.addEventListener("click", async () => {
+  const state = await getState();
+  await setManualMonthlyTable(buildManualMonthlyRows(state.surgeryDate));
+  await render();
 });
 
 // Eksportuje ręczną tabelę miesięczną do pliku CSV.
@@ -937,7 +987,7 @@ preparePublishDataButton.addEventListener("click", () => {
 });
 
 // Dodaje nowy wpis do obwodów.
-obwodyForm.addEventListener("submit", (event) => {
+obwodyForm.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   const entry = {
@@ -950,24 +1000,24 @@ obwodyForm.addEventListener("submit", (event) => {
     note: obwodyNoteInput.value.trim(),
   };
 
-  addObwodyEntry(entry);
+  await addObwodyEntry(entry);
   obwodyForm.reset();
   obwodyDateInput.value = isoDate(new Date());
 });
 
 // Usuwa wpis obwodów.
-obwodyList.addEventListener("click", (event) => {
+obwodyList.addEventListener("click", async (event) => {
   const button = event.target.closest(".obwody-delete");
   if (!button) return;
 
-  removeObwodyEntry(button.dataset.id);
+  await removeObwodyEntry(button.dataset.id);
 });
 
 // Eksport obwodów do PDF.
 exportObwodyPDFButton.addEventListener("click", exportObwodyToPDF);
 
-initDefaults();
-render();
+await initDefaults();
+await render();
 initNavigation();
-renderObwody();
+await renderObwody();
 loadPublishedProgress();
