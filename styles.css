@@ -31,6 +31,8 @@ body {
     radial-gradient(circle at 18% 18%, rgba(59, 129, 185, 0.12), transparent 22%),
     radial-gradient(circle at 82% 12%, rgba(239, 176, 98, 0.12), transparent 18%),
     linear-gradient(180deg, #eef4fb 0%, var(--tlo) 100%);
+  opacity: 0;
+  animation: page-fade 700ms ease forwards;
 }
 
 body::before {
@@ -62,6 +64,9 @@ body::before {
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(143, 188, 219, 0.2);
   padding: 12px 0;
+  opacity: 0;
+  transform: translateY(-10px);
+  animation: slide-down 520ms ease 120ms forwards;
 }
 
 .nav-container {
@@ -74,6 +79,7 @@ body::before {
 }
 
 .nav-link {
+  position: relative;
   color: var(--tekst-stonowany);
   text-decoration: none;
   font-weight: 500;
@@ -84,11 +90,24 @@ body::before {
 
 .nav-link.active {
   color: var(--akcent);
-  background: rgba(59, 129, 185, 0.1);
+  background: rgba(59, 129, 185, 0.14);
+  box-shadow: inset 0 0 0 1px rgba(59, 129, 185, 0.16);
 }
 
 .nav-link:hover {
   color: var(--akcent);
+}
+
+.nav-link.active::after {
+  content: "";
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 34px;
+  height: 3px;
+  border-radius: 999px;
+  background: var(--akcent);
 }
 
 /* SEKCJE */
@@ -98,6 +117,7 @@ body::before {
 
 .section.active {
   display: block;
+  animation: section-appear 360ms ease both;
 }
 
 .hero.section.active {
@@ -196,6 +216,7 @@ h1 {
 .journey-step.current .journey-dot {
   background: var(--sukces);
   box-shadow: 0 0 0 6px rgba(0, 177, 109, 0.12);
+  animation: pulse-ring 1800ms ease-in-out infinite;
 }
 
 .hero-actions {
@@ -319,6 +340,9 @@ h1 {
   position: relative;
   z-index: 2;
   background: rgba(255, 255, 255, 0.98);
+  opacity: 0;
+  transform: translateY(12px);
+  animation: pop-in 620ms ease 220ms forwards;
 }
 
 .hero-badge span,
@@ -337,6 +361,11 @@ label {
   color: var(--tekst);
 }
 
+#heroStartWeight {
+  display: inline-block;
+  animation: weight-pop 900ms ease 420ms both;
+}
+
 .hero-visual {
   position: relative;
   min-height: 320px;
@@ -344,6 +373,9 @@ label {
   flex-direction: column;
   justify-content: space-between;
   gap: 16px;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fade-up 760ms ease 120ms forwards;
 }
 
 .hero-graphic {
@@ -401,6 +433,7 @@ label {
   inset: 0 26% 0 0;
   border-radius: 999px;
   background: linear-gradient(90deg, rgba(59, 129, 185, 0.9), rgba(59, 153, 190, 0.95));
+  animation: fill-progress 1200ms ease-out 280ms forwards;
 }
 
 .graphic-hub {
@@ -936,6 +969,95 @@ button:hover {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes page-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes section-appear {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes weight-pop {
+  0% {
+    opacity: 0;
+    transform: translateY(14px) scale(0.95);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-4px) scale(1.05);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fill-progress {
+  from {
+    inset: 0 100% 0 0;
+  }
+  to {
+    inset: 0 26% 0 0;
+  }
+}
+
+@keyframes pulse-ring {
+  0%, 100% {
+    box-shadow: 0 0 0 6px rgba(0, 177, 109, 0.12);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 0 14px rgba(0, 177, 109, 0.06);
+    transform: scale(1.05);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body,
+  .nav-bar,
+  .hero-visual,
+  .hero-badge,
+  .progress-fill,
+  .reveal-card,
+  .journey-step.current .journey-dot {
+    animation: none !important;
+    transition: none !important;
   }
 }
 
