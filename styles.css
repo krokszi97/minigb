@@ -346,6 +346,31 @@ h1 {
   animation: pop-in 620ms ease 220ms forwards;
 }
 
+.hero-badge-body {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.hero-badge-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 16px;
+  background: rgba(59, 129, 185, 0.1);
+  color: var(--akcent);
+  flex-shrink: 0;
+  animation: icon-swell 1600ms ease-in-out 560ms infinite;
+}
+
+.hero-badge-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
 .hero-badge::after {
   content: "";
   position: absolute;
@@ -1032,6 +1057,15 @@ button:hover {
   50% {
     opacity: 0.26;
     transform: scale(1);
+  }
+}
+
+@keyframes icon-swell {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
   }
 }
 
