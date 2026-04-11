@@ -39,7 +39,6 @@ const entryNoteInput = document.querySelector("#entryNote");
 
 const bmiWeightInput = document.querySelector("#bmiWeight");
 const bmiHeightInput = document.querySelector("#bmiHeight");
-const bmiSexSelect = document.querySelector("#bmiSex");
 const bmiValue = document.querySelector("#bmiValue");
 const bmiCategory = document.querySelector("#bmiCategory");
 const bmiDescription = document.querySelector("#bmiDescription");
@@ -94,7 +93,7 @@ function formatSignedKg(value) {
   return `${prefix}${value.toFixed(1)} kg`;
 }
 
-function getBMICategory(bmi, sex) {
+function getBMICategory(bmi) {
   if (bmi < 18.5) {
     return {
       label: "Niedowaga",
@@ -104,15 +103,13 @@ function getBMICategory(bmi, sex) {
   if (bmi < 25) {
     return {
       label: "Prawidłowa masa ciała",
-      note: sex === "female"
-        ? "Dobra kondycja dla kobiety, monitoruj regularnie obwód talii."
-        : "Dobra kondycja dla mężczyzny, utrzymuj aktywność."
+      note: "Dobra kondycja dla mężczyzny, warto utrzymać aktywność.",
     };
   }
   if (bmi < 30) {
     return {
       label: "Nadwaga",
-      note: "Warto kontynuować redukcję masy i obserwować osiągnięcia.",
+      note: "Warto kontynuować redukcję masy i obserwować postępy.",
     };
   }
   if (bmi < 35) {
@@ -140,13 +137,12 @@ function calculateBMI(weightKg, heightCm) {
 }
 
 function updateBMI() {
-  if (!bmiWeightInput || !bmiHeightInput || !bmiSexSelect) {
+  if (!bmiWeightInput || !bmiHeightInput) {
     return;
   }
 
   const weight = Number(bmiWeightInput.value) || 0;
   const height = Number(bmiHeightInput.value) || 0;
-  const sex = bmiSexSelect.value;
 
   if (weight <= 0 || height <= 0) {
     bmiValue.textContent = "—";
@@ -157,7 +153,7 @@ function updateBMI() {
 
   const bmi = calculateBMI(weight, height);
   const rounded = bmi.toFixed(1);
-  const category = getBMICategory(bmi, sex);
+  const category = getBMICategory(bmi);
 
   bmiValue.textContent = rounded;
   bmiCategory.textContent = category.label;
@@ -165,7 +161,7 @@ function updateBMI() {
 }
 
 function renderBMI(state) {
-  if (!bmiWeightInput || !bmiHeightInput || !bmiSexSelect) {
+  if (!bmiWeightInput || !bmiHeightInput) {
     return;
   }
 
@@ -800,10 +796,9 @@ calculatorForm.addEventListener("input", () => {
   render();
 });
 
-if (bmiWeightInput && bmiHeightInput && bmiSexSelect) {
+if (bmiWeightInput && bmiHeightInput) {
   bmiWeightInput.addEventListener("input", updateBMI);
   bmiHeightInput.addEventListener("input", updateBMI);
-  bmiSexSelect.addEventListener("change", updateBMI);
 }
 
 // Dodaje nowy wpis do trackera.

@@ -754,6 +754,24 @@ input:focus {
   }
 }
 
+.hero-bmi-card {
+  margin-top: 22px;
+}
+
+.hero-bmi-card .form-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.hero-bmi-card .bmi-result {
+  margin-top: 18px;
+}
+
+@media (max-width: 720px) {
+  .hero-bmi-card .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .bmi-panel {
   margin-top: 18px;
   padding: 18px 20px;

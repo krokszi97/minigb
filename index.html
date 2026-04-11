@@ -168,48 +168,41 @@
               <span>Cel końcowy po 12 miesiącach</span>
               <strong>82.2 kg</strong>
             </div>
+          </div>
 
-            <div class="bmi-panel hero-bmi-panel">
-              <div class="bmi-panel-head">
-                <div>
-                  <p class="section-label">Kalkulator BMI</p>
-                  <h3>Pomiar obok celu końcowego</h3>
-                </div>
-              </div>
-
-              <form id="bmiForm" class="form-grid">
-                <label>
-                  Waga (kg)
-                  <input id="bmiWeight" type="number" min="40" max="250" step="0.1" value="130" />
-                </label>
-                <label>
-                  Wzrost (cm)
-                  <input id="bmiHeight" type="number" min="120" max="230" step="0.1" value="170" />
-                </label>
-                <label class="full-span">
-                  Płeć
-                  <select id="bmiSex">
-                    <option value="male">Mężczyzna</option>
-                    <option value="female">Kobieta</option>
-                  </select>
-                </label>
-              </form>
-
-              <div class="bmi-result">
-                <div class="bmi-result-number">
-                  <span class="section-label">Twój BMI</span>
-                  <strong id="bmiValue">—</strong>
-                </div>
-                <div class="bmi-result-meta">
-                  <span>Interpretacja</span>
-                  <strong id="bmiCategory">Podaj dane, aby obliczyć wynik</strong>
-                </div>
-                <p id="bmiDescription" class="bmi-description">
-                  BMI pomaga ocenić proporcje masy ciała. Uwzględnia płeć oraz aktualny ciężar.
-                </p>
+          <article class="card hero-bmi-card reveal-card">
+            <div class="card-head">
+              <div>
+                <p class="section-label">Kalkulator BMI</p>
+                <h2>Wynik dla mężczyzny</h2>
               </div>
             </div>
-          </div>
+
+            <form id="bmiForm" class="form-grid">
+              <label>
+                Waga (kg)
+                <input id="bmiWeight" type="number" min="40" max="250" step="0.1" value="130" />
+              </label>
+              <label>
+                Wzrost (cm)
+                <input id="bmiHeight" type="number" min="120" max="230" step="0.1" value="170" />
+              </label>
+            </form>
+
+            <div class="bmi-result">
+              <div class="bmi-result-number">
+                <span class="section-label">Twój BMI</span>
+                <strong id="bmiValue">—</strong>
+              </div>
+              <div class="bmi-result-meta">
+                <span>Interpretacja</span>
+                <strong id="bmiCategory">Podaj wagę i wzrost</strong>
+              </div>
+              <p id="bmiDescription" class="bmi-description">
+                Licznik BMI jest oparty na wynikach dla mężczyzn i pomaga sprawdzić zakres masy ciała.
+              </p>
+            </div>
+          </article>
         </div>
 
         <!-- KOLUMNA LEWA: kalkulator i plan miesięczny -->
