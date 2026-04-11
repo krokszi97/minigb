@@ -463,6 +463,22 @@ function buildProjectionPoints(state) {
   ];
 }
 
+// Tworzy zakres prognozy dla 6 i 12 miesięcy: dolna i górna granica.
+function buildProjectionRangePoints(state) {
+  const startDate = new Date(state.surgeryDate);
+  const startWeight = Number(state.startWeight);
+  const low6 = calculateProjection(startWeight, assumptions.sixMonths.high).finalWeight;
+  const high6 = calculateProjection(startWeight, assumptions.sixMonths.low).finalWeight;
+  const low12 = calculateProjection(startWeight, assumptions.twelveMonths.high).finalWeight;
+  const high12 = calculateProjection(startWeight, assumptions.twelveMonths.low).finalWeight;
+
+  return [
+    { date: startDate, low: startWeight, high: startWeight },
+    { date: addMonths(startDate, 6), low: low6, high: high6 },
+    { date: addMonths(startDate, 12), low: low12, high: high12 },
+  ];
+}
+
 // Renderuje pustą, ręcznie edytowalną tabelę miesiąc po miesiącu.
 function renderMonthlyProgressTable(state) {
   const rows = syncManualTableStartRow(getManualMonthlyTable(state), state);
@@ -546,6 +562,31 @@ function drawChart(state) {
       chartCanvas.height - 14
     );
   });
+
+  const rangePoints = buildProjectionRangePoints(state);
+  if (rangePoints.length > 1) {
+    chartContext.beginPath();
+    rangePoints.forEach((point, index) => {
+      const px = x(point.date.getTime());
+      const py = y(point.high);
+      if (index === 0) {
+        chartContext.moveTo(px, py);
+      } else {
+        chartContext.lineTo(px, py);
+      }
+    });
+    rangePoints
+      .slice()
+      .reverse()
+      .forEach((point) => {
+        const px = x(point.date.getTime());
+        const py = y(point.low);
+        chartContext.lineTo(px, py);
+      });
+    chartContext.closePath();
+    chartContext.fillStyle = "rgba(201, 111, 58, 0.16)";
+    chartContext.fill();
+  }
 
   chartContext.setLineDash([8, 8]);
   chartContext.strokeStyle = "#c96f3a";
