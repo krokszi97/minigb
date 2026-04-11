@@ -26,9 +26,17 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <nav class="nav-bar">
+      <div class="nav-container">
+        <a href="#home" class="nav-link active" data-section="home">Kalkulator</a>
+        <a href="#tracker" class="nav-link" data-section="tracker">Tracker</a>
+        <a href="#obwody" class="nav-link" data-section="obwody">Obwody</a>
+        <a href="#tabela" class="nav-link" data-section="tabela">Tabela</a>
+      </div>
+    </nav>
     <main class="app-shell">
       <!-- SEKCJA HERO: tutaj najłatwiej zmienisz główny nagłówek i opis -->
-      <section class="hero">
+      <section class="hero section" id="home">
         <div class="hero-copy">
           <p class="eyebrow">MGB / OAGB</p>
           <h1>MiniGB - kalkulator i tracker postępów</h1>
@@ -230,8 +238,55 @@
           </div>
         </article>
 
+        <!-- NOWA SEKCJA: OBWODY CIAŁA -->
+        <article class="card obwody-card reveal-card section" id="obwody">
+          <div class="card-head">
+            <div>
+              <p class="section-label">Obwody</p>
+              <h2>Śledzenie obwodów ciała</h2>
+            </div>
+            <button id="exportObwodyPDF" class="ghost-button" type="button">Eksport PDF</button>
+          </div>
+
+          <form id="obwodyForm" class="entry-form">
+            <label>
+              Data
+              <input id="obwodyDate" type="date" required />
+            </label>
+
+            <label>
+              Talia (cm)
+              <input id="obwodyTalia" type="number" min="50" max="200" step="0.1" />
+            </label>
+
+            <label>
+              Biodra (cm)
+              <input id="obwodyBiodra" type="number" min="50" max="200" step="0.1" />
+            </label>
+
+            <label>
+              Ramię (cm)
+              <input id="obwodyRamie" type="number" min="20" max="100" step="0.1" />
+            </label>
+
+            <label>
+              Uda (cm)
+              <input id="obwodyUda" type="number" min="30" max="150" step="0.1" />
+            </label>
+
+            <label class="full-span">
+              Notatka
+              <input id="obwodyNote" type="text" maxlength="120" placeholder="Np. po treningu, rano" />
+            </label>
+
+            <button class="primary-button full-span" type="submit">Dodaj wpis</button>
+          </form>
+
+          <div id="obwodyList" class="entry-list"></div>
+        </article>
+
         <!-- KOLUMNA PRAWA: tracker, statystyki i wykres -->
-        <article class="card tracker-card reveal-card" id="tracker">
+        <article class="card tracker-card reveal-card section" id="tracker">
           <div class="card-head">
             <div>
               <p class="section-label">Tracker</p>
@@ -297,7 +352,7 @@
             <canvas id="progressChart" width="860" height="340" aria-label="Wykres postępów"></canvas>
           </div>
 
-          <div class="monthly-table-card reveal-card" id="tabela-miesieczna">
+          <div class="monthly-table-card reveal-card section" id="tabela">
             <div class="card-head monthly-table-head">
               <div>
                 <p class="section-label">Tabela</p>

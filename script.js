@@ -1,6 +1,7 @@
 // Edytuj tutaj nazwę klucza localStorage, jeśli chcesz trzymać dane pod innym identyfikatorem.
 const STORAGE_KEY = "mgb-progress-tracker-v1";
 const MONTHLY_TABLE_KEY = "mgb-manual-monthly-table-v1";
+const OBWODY_KEY = "mgb-obwody-tracker-v1";
 const PUBLISHED_PROGRESS_URL = "published-progress.json";
 
 // Najważniejsze teksty interfejsu do ręcznej edycji.
@@ -59,6 +60,21 @@ const publicSnapshot = document.querySelector("#publicSnapshot");
 const publishStatus = document.querySelector("#publishStatus");
 const chartCanvas = document.querySelector("#progressChart");
 const chartContext = chartCanvas.getContext("2d");
+
+// Nowe dla obwodów
+const obwodyForm = document.querySelector("#obwodyForm");
+const obwodyDateInput = document.querySelector("#obwodyDate");
+const obwodyTaliaInput = document.querySelector("#obwodyTalia");
+const obwodyBiodraInput = document.querySelector("#obwodyBiodra");
+const obwodyRamieInput = document.querySelector("#obwodyRamie");
+const obwodyUdaInput = document.querySelector("#obwodyUda");
+const obwodyNoteInput = document.querySelector("#obwodyNote");
+const obwodyList = document.querySelector("#obwodyList");
+const exportObwodyPDFButton = document.querySelector("#exportObwodyPDF");
+
+// Nawigacja
+const navLinks = document.querySelectorAll(".nav-link");
+const sections = document.querySelectorAll(".section");
 
 // Formatuje wagę jako tekst, np. "94.3 kg".
 function formatKg(value) {
@@ -284,23 +300,110 @@ function renderPublicSnapshot(data) {
   `;
 }
 
-// Pobiera publiczny snapshot z pliku JSON opublikowanego razem ze stroną.
-async function loadPublishedProgress() {
+// Pobiera dane obwodów z localStorage.
+function getObwodyState() {
   try {
-    const response = await fetch(`${PUBLISHED_PROGRESS_URL}?t=${Date.now()}`, {
-      cache: "no-store",
-    });
-
-    if (!response.ok) {
-      renderPublicSnapshot(null);
-      return;
-    }
-
-    const data = await response.json();
-    renderPublicSnapshot(data);
+    const parsed = JSON.parse(localStorage.getItem(OBWODY_KEY));
+    return Array.isArray(parsed) ? parsed : [];
   } catch {
-    renderPublicSnapshot(null);
+    return [];
   }
+}
+
+// Zapisuje dane obwodów do localStorage.
+function setObwodyState(obwody) {
+  localStorage.setItem(OBWODY_KEY, JSON.stringify(obwody));
+}
+
+// Sortuje obwody rosnąco po dacie.
+function getSortedObwody(obwody) {
+  return [...obwody].sort((a, b) => new Date(a.date) - new Date(b.date));
+}
+
+// Renderuje listę obwodów.
+function renderObwody() {
+  const obwody = getSortedObwody(getObwodyState()).reverse();
+  obwodyList.innerHTML = "";
+
+  if (obwody.length === 0) {
+    obwodyList.innerHTML = `<div class="entry-item"><div class="entry-main"><strong>Brak wpisów obwodów</strong><span class="entry-note">Dodaj pierwszy pomiar obwodów ciała.</span></div></div>`;
+    return;
+  }
+
+  obwody.forEach((entry) => {
+    const wrapper = document.createElement("div");
+    wrapper.className = "obwody-item";
+    wrapper.innerHTML = `
+      <div class="obwody-item-meta">${formatDate(new Date(entry.date))}</div>
+      <div class="obwody-item-values">
+        <span>Talia: ${entry.talia || "—"} cm</span>
+        <span>Biodra: ${entry.biodra || "—"} cm</span>
+        <span>Ramię: ${entry.ramie || "—"} cm</span>
+        <span>Uda: ${entry.uda || "—"} cm</span>
+      </div>
+      <div class="obwody-item-note">${entry.note || APP_TEXT.noNote}</div>
+      <button class="obwody-delete" type="button" data-id="${entry.id}">Usuń</button>
+    `;
+    obwodyList.appendChild(wrapper);
+  });
+}
+
+// Dodaje nowy wpis obwodów.
+function addObwodyEntry(entry) {
+  const obwody = getObwodyState();
+  obwody.push(entry);
+  setObwodyState(obwody);
+  renderObwody();
+}
+
+// Usuwa wpis obwodów.
+function removeObwodyEntry(id) {
+  const obwody = getObwodyState().filter((entry) => entry.id !== id);
+  setObwodyState(obwody);
+  renderObwody();
+}
+
+// Eksportuje obwody do PDF.
+function exportObwodyToPDF() {
+  // Prosta implementacja - można użyć biblioteki jak jsPDF, ale na razie alert
+  alert("Eksport do PDF wymaga dodatkowej biblioteki. Na razie dane są w localStorage.");
+}
+
+// Nawigacja między sekcjami.
+function navigateToSection(sectionId) {
+  sections.forEach((section) => section.classList.remove("active"));
+  navLinks.forEach((link) => link.classList.remove("active"));
+
+  const targetSection = document.querySelector(`#${sectionId}`);
+  const targetLink = document.querySelector(`[data-section="${sectionId}"]`);
+
+  if (targetSection) targetSection.classList.add("active");
+  if (targetLink) targetLink.classList.add("active");
+
+  // Scroll to top
+  window.scrollTo(0, 0);
+}
+
+// Inicjalizuje nawigację.
+function initNavigation() {
+  navLinks.forEach((link) => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      const section = link.getAttribute("data-section");
+      navigateToSection(section);
+      // Update URL hash
+      window.location.hash = section;
+    });
+  });
+
+  // Handle initial load and hash changes
+  const hash = window.location.hash.slice(1) || "home";
+  navigateToSection(hash);
+
+  window.addEventListener("hashchange", () => {
+    const hash = window.location.hash.slice(1) || "home";
+    navigateToSection(hash);
+  });
 }
 
 // Renderuje główny kalkulator, podsumowania i cele miesięczne.
@@ -613,6 +716,7 @@ function initDefaults() {
     setManualMonthlyTable(rows);
   }
   entryDateInput.value = isoDate(new Date());
+  obwodyDateInput.value = isoDate(new Date());
 }
 
 // Zapisuje każdą zmianę w ręcznej tabeli od razu po wpisaniu.
@@ -693,6 +797,38 @@ preparePublishDataButton.addEventListener("click", () => {
     "Pobrano plik published-progress.json. Podmień nim plik w repo, zrób commit i push, a wszyscy zobaczą ten snapshot.";
 });
 
+// Dodaje nowy wpis do obwodów.
+obwodyForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const entry = {
+    id: crypto.randomUUID(),
+    date: obwodyDateInput.value,
+    talia: Number(obwodyTaliaInput.value) || null,
+    biodra: Number(obwodyBiodraInput.value) || null,
+    ramie: Number(obwodyRamieInput.value) || null,
+    uda: Number(obwodyUdaInput.value) || null,
+    note: obwodyNoteInput.value.trim(),
+  };
+
+  addObwodyEntry(entry);
+  obwodyForm.reset();
+  obwodyDateInput.value = isoDate(new Date());
+});
+
+// Usuwa wpis obwodów.
+obwodyList.addEventListener("click", (event) => {
+  const button = event.target.closest(".obwody-delete");
+  if (!button) return;
+
+  removeObwodyEntry(button.dataset.id);
+});
+
+// Eksport obwodów do PDF.
+exportObwodyPDFButton.addEventListener("click", exportObwodyToPDF);
+
 initDefaults();
 render();
+initNavigation();
+renderObwody();
 loadPublishedProgress();

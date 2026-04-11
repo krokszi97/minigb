@@ -53,6 +53,53 @@ body::before {
   padding: 32px 20px 48px;
 }
 
+/* NAWIGACJA */
+.nav-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(143, 188, 219, 0.2);
+  padding: 12px 0;
+}
+
+.nav-container {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+.nav-link {
+  color: var(--tekst-stonowany);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 20px;
+  transition: color 0.2s, background 0.2s;
+}
+
+.nav-link.active {
+  color: var(--akcent);
+  background: rgba(59, 129, 185, 0.1);
+}
+
+.nav-link:hover {
+  color: var(--akcent);
+}
+
+/* SEKCJE */
+.section {
+  display: none;
+}
+
+.section.active {
+  display: block;
+}
+
 /* GÓRNA SEKCJA Z TYTUŁEM */
 .hero {
   display: grid;
@@ -480,6 +527,61 @@ label {
 .graphic-center strong {
   font-family: "Space Grotesk", sans-serif;
   font-size: 1.5rem;
+}
+
+.obwody-card .entry-form {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.obwody-card .entry-form label {
+  margin-bottom: 12px;
+}
+
+.obwody-card .entry-list {
+  margin-top: 20px;
+}
+
+.obwody-item {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 2fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(143, 188, 219, 0.22);
+}
+
+.obwody-item-meta {
+  color: var(--tekst-stonowany);
+  font-size: 0.9rem;
+}
+
+.obwody-item-values {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.obwody-item-values span {
+  background: rgba(59, 129, 185, 0.1);
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.obwody-item-note {
+  color: var(--tekst-stonowany);
+  font-size: 0.9rem;
+}
+
+.obwody-delete {
+  background: transparent;
+  color: var(--akcent-ciemny);
+  border: 0;
+  padding: 6px 8px;
+  font-size: 0.8rem;
 }
 
 /* DWIE GŁÓWNE KOLUMNY APLIKACJI */
@@ -1005,6 +1107,27 @@ canvas {
   .card {
     padding: 18px;
     border-radius: 24px;
+  }
+
+  .nav-container {
+    padding: 0 14px;
+    gap: 12px;
+    overflow-x: auto;
+  }
+
+  .nav-link {
+    white-space: nowrap;
+    padding: 6px 12px;
+    font-size: 0.9rem;
+  }
+
+  .obwody-item {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .obwody-item-values {
+    order: -1;
   }
 
   h1 {
