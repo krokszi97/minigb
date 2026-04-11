@@ -99,6 +99,74 @@
               </article>
             </div>
           </div>
+
+          <!-- KALKULATOR: kalkulator i plan miesięczny -->
+          <article class="card calculator-card reveal-card" id="plan-roczny">
+            <div class="card-head">
+              <div>
+                <p class="section-label">Kalkulator</p>
+                <h2>Założenia prognozy</h2>
+              </div>
+            </div>
+
+            <form id="calculatorForm" class="form-grid">
+              <label>
+                Waga początkowa (kg)
+                <input id="startWeight" type="number" min="60" max="300" step="0.1" value="130" />
+              </label>
+
+              <label>
+                Data opki
+                <input id="surgeryDate" type="date" />
+              </label>
+            </form>
+
+            <div class="forecast-grid">
+              <div class="assumption-box">
+                <h3>Model prognozy</h3>
+                <p>
+                  Szacunek bazuje na orientacyjnym <strong>%TWL</strong> po MGB/OAGB:
+                  około <strong>27,5%</strong> po 6 miesiącach i <strong>36,8%</strong>
+                  po 12 miesiącach. Pokazuję też przedziały ostrożny i ambitny.
+                </p>
+              </div>
+            </div>
+
+            <div class="projection-grid">
+              <article class="projection-card">
+                <p class="projection-label">6 miesięcy</p>
+                <div class="projection-main">
+                  <strong id="weight6m">94.3 kg</strong>
+                  <span id="loss6m">-35.8 kg</span>
+                </div>
+                <p id="range6m" class="projection-range">Zakres: 89.7-100.1 kg</p>
+              </article>
+
+              <article class="projection-card highlight">
+                <p class="projection-label">12 miesięcy</p>
+                <div class="projection-main">
+                  <strong id="weight12m">82.2 kg</strong>
+                  <span id="loss12m">-47.8 kg</span>
+                </div>
+                <p id="range12m" class="projection-range">Zakres: 78.0-88.4 kg</p>
+              </article>
+            </div>
+
+            <div class="timeline">
+              <div class="timeline-row">
+                <span>Dziś</span>
+                <strong id="todayWeight">130.0 kg</strong>
+              </div>
+              <div class="timeline-row">
+                <span id="month6Label">+ 6 miesięcy</span>
+                <strong id="timeline6m">94.3 kg</strong>
+              </div>
+              <div class="timeline-row">
+                <span id="month12Label">+ 12 miesięcy</span>
+                <strong id="timeline12m">82.2 kg</strong>
+              </div>
+            </div>
+          </article>
         </div>
         <div class="hero-visual">
           <div class="hero-badge">
@@ -224,73 +292,7 @@
             </div>
           </article>
 
-          <!-- KALKULATOR: kalkulator i plan miesięczny -->
-          <article class=\"card calculator-card reveal-card\" id=\"plan-roczny\">
-          <div class="card-head">
-            <div>
-              <p class="section-label">Kalkulator</p>
-              <h2>Założenia prognozy</h2>
-            </div>
-          </div>
-
-          <form id="calculatorForm" class="form-grid">
-            <label>
-              Waga początkowa (kg)
-              <input id="startWeight" type="number" min="60" max="300" step="0.1" value="130" />
-            </label>
-
-            <label>
-              Data opki
-              <input id="surgeryDate" type="date" />
-            </label>
-          </form>
-
-          <div class="forecast-grid">
-            <div class="assumption-box">
-              <h3>Model prognozy</h3>
-              <p>
-                Szacunek bazuje na orientacyjnym <strong>%TWL</strong> po MGB/OAGB:
-                około <strong>27,5%</strong> po 6 miesiącach i <strong>36,8%</strong>
-                po 12 miesiącach. Pokazuję też przedziały ostrożny i ambitny.
-              </p>
-            </div>
-          </div>
-
-          <div class="projection-grid">
-            <article class="projection-card">
-              <p class="projection-label">6 miesięcy</p>
-              <div class="projection-main">
-                <strong id="weight6m">94.3 kg</strong>
-                <span id="loss6m">-35.8 kg</span>
-              </div>
-              <p id="range6m" class="projection-range">Zakres: 89.7-100.1 kg</p>
-            </article>
-
-            <article class="projection-card highlight">
-              <p class="projection-label">12 miesięcy</p>
-              <div class="projection-main">
-                <strong id="weight12m">82.2 kg</strong>
-                <span id="loss12m">-47.8 kg</span>
-              </div>
-              <p id="range12m" class="projection-range">Zakres: 78.0-88.4 kg</p>
-            </article>
-          </div>
-
-          <div class="timeline">
-            <div class="timeline-row">
-              <span>Dziś</span>
-              <strong id="todayWeight">130.0 kg</strong>
-            </div>
-            <div class="timeline-row">
-              <span id="month6Label">+ 6 miesięcy</span>
-              <strong id="timeline6m">94.3 kg</strong>
-            </div>
-            <div class="timeline-row">
-              <span id="month12Label">+ 12 miesięcy</span>
-              <strong id="timeline12m">82.2 kg</strong>
-            </div>
-          </div>
-        </article>
+          </article>
         </div>
 
       </section>
