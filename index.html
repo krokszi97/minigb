@@ -31,7 +31,6 @@
       <div class="nav-container">
         <a href="#home" class="nav-link active" data-section="home">Kalkulator</a>
         <a href="#tracker" class="nav-link" data-section="tracker">Tracker</a>
-        <a href="#trends" class="nav-link" data-section="trends">AI Trendy</a>
         <a href="#obwody" class="nav-link" data-section="obwody">Obwody</a>
         <a href="#tabela" class="nav-link" data-section="tabela">Tabela</a>
       </div>
@@ -343,53 +342,6 @@
           </form>
 
           <div id="obwodyList" class="entry-list"></div>
-        </article>
-      </section>
-      <section class="page section" id="trends">
-        <article class="card trends-card reveal-card">
-          <div class="card-head">
-            <div>
-              <p class="section-label">Analiza trendów</p>
-              <h2>AI Predykcja postępów</h2>
-            </div>
-            <button id="refreshTrends" class="ghost-button" type="button">Odśwież</button>
-          </div>
-
-          <div id="trendsContent">
-            <div class="trends-empty">
-              <p>Brak danych do analizy. Dodaj co najmniej 3 wpisy w trackerze, aby włączyć predykcję AI.</p>
-            </div>
-          </div>
-
-          <div id="trendsAnalysis" class="trends-analysis" style="display: none;">
-            <div class="trend-stats-grid">
-              <div class="trend-stat">
-                <span>Średni spadek tygodniowy</span>
-                <strong id="weeklyAvg">—</strong>
-              </div>
-              <div class="trend-stat">
-                <span>Przewidywana waga za 1 miesiąc</span>
-                <strong id="pred1Month">—</strong>
-              </div>
-              <div class="trend-stat">
-                <span>Przewidywana waga za 3 miesiące</span>
-                <strong id="pred3Months">—</strong>
-              </div>
-              <div class="trend-stat">
-                <span>Dokładność predykcji</span>
-                <strong id="accuracy">—</strong>
-              </div>
-            </div>
-
-            <div class="trend-chart-container">
-              <canvas id="trendChart" width="860" height="300" aria-label="Wykres trendów z predykcją"></canvas>
-            </div>
-
-            <div class="trend-insights">
-              <h3>Insights AI</h3>
-              <div id="aiInsights" class="insights-list"></div>
-            </div>
-          </div>
         </article>
       </section>
       <section class="page section" id="tracker">
