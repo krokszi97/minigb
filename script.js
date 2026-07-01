@@ -34,7 +34,7 @@ async function loadObwody() {
 
 async function saveMonthlyTable(rows) {
   await db.monthlyTable.clear();  // Wyczyść starą tabelę
-  await db.monthlyTable.bulkAdd(rows);
+  await db.monthlyTable.bulkPut(rows);
 }
 
 async function loadMonthlyTable() {
@@ -371,11 +371,12 @@ function projectionRangeText(startWeight, range) {
 }
 
 // Buduje dane do publicznej publikacji na stronie.
-function buildPublishedPayload(state) {
+async function buildPublishedPayload(state) {
   const entries = getSortedEntries(state.entries);
   const latestEntry = entries.length > 0 ? entries[entries.length - 1] : null;
   const recentEntries = entries.slice(-6).reverse();
-  const monthlyTable = getManualMonthlyTable(state).map((row) => ({
+  const monthlyTableRows = await getManualMonthlyTable(state);
+  const monthlyTable = monthlyTableRows.map((row) => ({
     monthLabel: row.monthLabel,
     date: row.date,
     weight: row.weight,
@@ -436,6 +437,21 @@ function renderPublicSnapshot(data) {
     </div>
     <ul class="snapshot-list">${recentList}</ul>
   `;
+}
+
+async function loadPublishedProgress() {
+  try {
+    const response = await fetch(PUBLISHED_PROGRESS_URL);
+    if (!response.ok) {
+      throw new Error("No published progress available");
+    }
+
+    const data = await response.json();
+    renderPublicSnapshot(data);
+  } catch {
+    publicSnapshot.innerHTML =
+      '<div class="public-snapshot-empty">Brak opublikowanego snapshotu. Po wygenerowaniu pliku i pushu będzie widoczny tutaj.</div>';
+  }
 }
 
 // Pobiera dane obwodów z IndexedDB.
@@ -621,9 +637,9 @@ function buildProjectionRangePoints(state) {
 }
 
 // Renderuje pustą, ręcznie edytowalną tabelę miesiąc po miesiącu.
-function renderMonthlyProgressTable(state) {
-  const rows = syncManualTableStartRow(getManualMonthlyTable(state), state);
-  setManualMonthlyTable(rows);
+async function renderMonthlyProgressTable(state) {
+  const rows = syncManualTableStartRow(await getManualMonthlyTable(state), state);
+  await setManualMonthlyTable(rows);
 
   monthlyProgressBody.innerHTML = "";
 
@@ -827,7 +843,7 @@ async function render() {
 
   renderCalculator(state);
   renderEntries(state);
-  renderMonthlyProgressTable(state);
+  await renderMonthlyProgressTable(state);
   drawChart(state);
 }
 
@@ -938,9 +954,9 @@ resetMonthlyTableButton.addEventListener("click", async () => {
 });
 
 // Eksportuje ręczną tabelę miesięczną do pliku CSV.
-exportMonthlyTableButton.addEventListener("click", () => {
-  const state = getState();
-  const rows = getManualMonthlyTable(state);
+exportMonthlyTableButton.addEventListener("click", async () => {
+  const state = await getState();
+  const rows = await getManualMonthlyTable(state);
   const csvLines = [
     ["Miesiąc", "Data", "Waga", "Notatka"].join(";"),
     ...rows.map((row) =>
@@ -967,9 +983,9 @@ exportMonthlyTableButton.addEventListener("click", () => {
 });
 
 // Przygotowuje plik JSON z bieżącymi lokalnymi danymi do ręcznej publikacji.
-preparePublishDataButton.addEventListener("click", () => {
-  const state = getState();
-  const payload = buildPublishedPayload(state);
+preparePublishDataButton.addEventListener("click", async () => {
+  const state = await getState();
+  const payload = await buildPublishedPayload(state);
   const blob = new Blob([JSON.stringify(payload, null, 2)], {
     type: "application/json;charset=utf-8;",
   });
@@ -1016,8 +1032,12 @@ obwodyList.addEventListener("click", async (event) => {
 // Eksport obwodów do PDF.
 exportObwodyPDFButton.addEventListener("click", exportObwodyToPDF);
 
-await initDefaults();
-await render();
-initNavigation();
-await renderObwody();
-loadPublishedProgress();
+async function initApp() {
+  await initDefaults();
+  await render();
+  initNavigation();
+  await renderObwody();
+  loadPublishedProgress();
+}
+
+initApp();
