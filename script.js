@@ -267,8 +267,8 @@ function interpolateWeight(startWeight, month) {
 // Pobiera aktualny stan aplikacji z IndexedDB.
 async function getState() {
   const fallback = {
-    startWeight: 131,5,
-    surgeryDate: isoDate(new Date()),
+    startWeight: 131.5,
+    surgeryDate: "2026-05-14",
     entries: [],
   };
 
@@ -851,8 +851,8 @@ async function render() {
 calculatorForm.addEventListener("input", async () => {
   const nextState = await getState();
   const previousSurgeryDate = nextState.surgeryDate;
-  nextState.startWeight = Number(startWeightInput.value) || 130;
-  nextState.surgeryDate = surgeryDateInput.value || "2026-04-21";
+  nextState.startWeight = Number(startWeightInput.value) || 131.5;
+  nextState.surgeryDate = surgeryDateInput.value || "2026-05-14";
   await setState(nextState);
 
   if (nextState.surgeryDate !== previousSurgeryDate) {
@@ -911,7 +911,8 @@ clearEntriesButton.addEventListener("click", async () => {
 // Ustawia wartości startowe przy pierwszym otwarciu strony.
 async function initDefaults() {
   const state = await getState();
-  state.surgeryDate = "2026-04-21";
+  state.startWeight = 131.5;
+  state.surgeryDate = "2026-05-14";
 
   await setState(state);
   const rows = await getManualMonthlyTable(state);
