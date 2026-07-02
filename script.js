@@ -267,7 +267,7 @@ function interpolateWeight(startWeight, month) {
 // Pobiera aktualny stan aplikacji z IndexedDB.
 async function getState() {
   const fallback = {
-    startWeight: 130,
+    startWeight: 131,5,
     surgeryDate: isoDate(new Date()),
     entries: [],
   };
